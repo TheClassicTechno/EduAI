@@ -17,7 +17,6 @@ export default function CollegeInfoApp() {
   const [compareFilteredColleges, setCompareFilteredColleges] = useState<College[]>([]);
   const [showCompareSearch, setShowCompareSearch] = useState(false);
 
-  // College search functionality
   useEffect(() => {
     if (searchQuery.length > 2) {
       const filtered = collegeData.filter(college => 
@@ -29,7 +28,6 @@ export default function CollegeInfoApp() {
     }
   }, [searchQuery]);
 
-  // Comparison school search functionality
   useEffect(() => {
     if (compareSearchQuery.length > 2) {
       const filtered = collegeData.filter(college => 
@@ -53,7 +51,6 @@ export default function CollegeInfoApp() {
 
   const handleHeaderSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add header search/navigation functionality here
     console.log('Header search:', headerSearch);
     setHeaderSearch('');
   };
@@ -74,6 +71,21 @@ export default function CollegeInfoApp() {
     setCompareMode(true);
   };
 
+  const resetComparison = () => {
+    setComparisonSchool(null);
+    setCompareMode(false);
+    setShowCompareSearch(false);
+  };
+
+  const returnToHome = () => {
+    setCurrentPage('home');
+    setSearchQuery('');
+    setSelectedSchool(null);
+    setComparisonSchool(null);
+    setCompareMode(false);
+    setFilteredColleges([]);
+  };
+
   const toggleCompareSearch = () => {
     setShowCompareSearch(!showCompareSearch);
     if (!showCompareSearch) {
@@ -81,32 +93,10 @@ export default function CollegeInfoApp() {
     }
   };
 
-  const removeComparison = () => {
-    setComparisonSchool(null);
-    setCompareMode(false);
-  };
-
-  const goToHome = () => {
-    setCurrentPage('home');
-    setSearchQuery('');
-    setFilteredColleges([]);
-  };
-
-  const schoolTabs = [
-    'COST OF ENROLLMENT',
-    'WHAT\'S THE VALUE OF GOING',
-    'DEMOGRAPHICS',
-    'SCHOLARSHIPS',
-    'STEPS TO APPLY'
-  ];
-
-  // Generate mock data for display
   const getMockData = (schoolName: string) => {
-    // Use a deterministic approach based on school name for consistent values
     const nameSum = schoolName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-    
     const seed = nameSum % 1000;
-    const mockData = {
+    return {
       avgDebt: Math.floor((seed * 31) % 15000) + 5000,
       avgRepayTime: Math.floor((seed * 13) % 5) + 7,
       avgMonthlyRate: Math.floor((seed * 7) % 100) + 30,
@@ -117,16 +107,22 @@ export default function CollegeInfoApp() {
       diversityIndex: Math.floor((seed * 17) % 40) + 40,
       studentFacultyRatio: Math.floor((seed * 13) % 20) + 10
     };
-    
-    return mockData;
   };
+
+  const schoolTabs = [
+    'COST OF ENROLLMENT',
+    'WHAT\'S THE VALUE OF GOING',
+    'DEMOGRAPHICS',
+    'SCHOLARSHIPS',
+    'STEPS TO APPLY'
+  ];
 
   return (
     <div className="app-container">
       <header className="header">
         <div className="header-container">
           <div className="logo-container">
-            <div className="edu-logo" onClick={goToHome}>
+            <div className="edu-logo" onClick={returnToHome}>
               <span className="edu-icon">👨‍🎓</span>
               <span className="edu-text">EDU AI</span>
             </div>
@@ -168,7 +164,7 @@ export default function CollegeInfoApp() {
               <h2 className="search-prompt">Type in a school's name to find information about...</h2>
               
               <div className="info-categories">
-                <div className="info-category">
+              <div className="info-category">
                   <div className="category-icon green">💰</div>
                   <div className="category-text">
                     <div className="category-title">Debt, Aid,</div>
@@ -235,14 +231,20 @@ export default function CollegeInfoApp() {
         <div className="school-content">
           <div className="banner">
             <div className="banner-container">
+              <div 
+                className="banner-back-arrow"
+                onClick={returnToHome}
+              >
+                ←
+              </div>
               <h1 className="banner-title">FIND COLLEGE INFO</h1>
-              <div className="banner-icon">🎓</div>
+              {!compareMode && <div className="banner-icon">🎓</div>}
             </div>
           </div>
           
           <div className="main-container">
             <p className="info-link">
-              Click to explore more tuition, financial aid, & demographic info about any college: 
+              Click to explore more tuition, financial aid, & demographic info about any college:{' '} 
               <a href="https://collegescorecard.ed.gov/" className="link">https://collegescorecard.ed.gov/</a>
             </p>
             
@@ -256,7 +258,15 @@ export default function CollegeInfoApp() {
                   placeholder="Search for a school to compare..."
                   autoFocus
                 />
-                <button className="compare-cancel-button" onClick={toggleCompareSearch}>×</button>
+                <button 
+                  className="compare-cancel-button" 
+                  onClick={() => {
+                    setShowCompareSearch(false);
+                    resetComparison();
+                  }}
+                >
+                  ×
+                </button>
                 
                 {compareFilteredColleges.length > 0 && (
                   <div className="compare-search-results">
@@ -273,11 +283,17 @@ export default function CollegeInfoApp() {
                 )}
               </div>
             ) : (
-              <div className="compare-box" onClick={toggleCompareSearch}>
+              <div className="compare-box" onClick={!comparisonSchool ? toggleCompareSearch : undefined}>
                 <div className="compare-text">
                   {comparisonSchool ? `COMPARING WITH: ${comparisonSchool.INSTNM}` : 'ADD SCHOOL TO COMPARE...'}
                 </div>
-                <button className="compare-button">
+                <button 
+                  className="compare-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    comparisonSchool ? resetComparison() : toggleCompareSearch();
+                  }}
+                >
                   {comparisonSchool ? '×' : '+'}
                 </button>
               </div>
@@ -285,7 +301,7 @@ export default function CollegeInfoApp() {
             
             {compareMode && comparisonSchool ? (
               <div className="comparison-view">
-                <div className="schools-header">
+              <div className="schools-header">
                   <div className="school-header-item">
                     <div className="school-icon">🎓</div>
                     <h2 className="school-name">{selectedSchool?.INSTNM}</h2>
@@ -577,7 +593,7 @@ export default function CollegeInfoApp() {
                   </div>
                   
                   <div className="tab-content">
-                    {activeTab === 'COST OF ENROLLMENT' && selectedSchool && (
+                  {activeTab === 'COST OF ENROLLMENT' && selectedSchool && (
                       <div className="financial-info">
                         <div className="stat-cards">
                           <div className="stat-card">

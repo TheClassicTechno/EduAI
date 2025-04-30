@@ -180,6 +180,27 @@ body {
     font-size: 24px;
 }
 
+.banner-back-arrow {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .banner-back-arrow:hover {
+    color: var(--yellow-dark);
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .banner-container {
+    position: relative; /* Add this to existing banner-container */
+  }
+
 /* Home Page Styles */
 .home-content {
     flex: 1;
@@ -381,20 +402,19 @@ body {
 
 /* Comparison Styles */
 .compare-box {
+    background-color: #fef3c0;
+    border-radius: 8px;
+    padding: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    margin: 15px 0;
-    cursor: pointer;
-    border: 1px solid #e0e0e0;
+    margin-bottom: 24px;
+    cursor: pointer; 
     transition: all 0.2s ease;
 }
 
 .compare-box:hover {
-    background-color: #f0f0f0;
+    background-color: var(--yellow-light);
     border-color: #d0d0d0;
 }
 
@@ -413,6 +433,7 @@ body {
     font-size: 18px;
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -425,9 +446,9 @@ body {
 
 .compare-search-box {
     display: flex;
+    background-color: var(--yellow-light);
     align-items: center;
     padding: 12px 20px;
-    background-color: #fff;
     border-radius: 8px;
     margin: 15px 0;
     border: 1px solid #e0e0e0;
@@ -435,6 +456,7 @@ body {
 }
 
 .compare-search-input {
+    background-color: var(--yellow-light);
     flex: 1;
     padding: 10px 15px;
     border: 1px solid #ddd;
