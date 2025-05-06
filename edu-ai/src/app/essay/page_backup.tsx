@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import './essay_test.css'  
+import './essayFeedback_try.css'  
 
 export default function EssayFeedbackPage() {
   const [essayTitle, setEssayTitle] = useState('')
@@ -91,81 +91,74 @@ GRADE ESTIMATE: B+
         </div>
       </div>
 
-      
       <div className='main-container'>
-        <div className='two-column-container'>
-          {/* Left column - Input section */}
-          <div className='column-container'>
-            <div className='input-section'>
-              <div className='input-container-title'>
-                <label htmlFor='essay-title' className='input-label'>
-                  Essay Title
-                </label>
-                <input
-                  id='essay-title'
-                  type='text'
-                  value={essayTitle}
-                  onChange={(e) => setEssayTitle(e.target.value)}
-                  className='title-input'
-                  placeholder='Enter your essay title here...'
-                />
-              </div>
+        <div className='essay-feedback-layout'>
+          <div className='input-section'>
+            <div className='input-container'>
+              <label htmlFor='essay-title' className='input-label'>
+                Essay Title
+              </label>
+              <input
+                id='essay-title'
+                type='text'
+                value={essayTitle}
+                onChange={(e) => setEssayTitle(e.target.value)}
+                className='title-input'
+                placeholder='Enter your essay title here...'
+              />
+            </div>
 
-              <div className='input-container-essay'>
-                <label htmlFor='essay-text' className='input-label'>
-                  Essay Text
-                </label>
-                <textarea
-                  id='essay-text'
-                  value={essayText}
-                  onChange={(e) => setEssayText(e.target.value)}
-                  className='essay-input'
-                  placeholder='Paste your essay text here...'
-                />
-              </div>
+            <div className='input-container'>
+              <label htmlFor='essay-text' className='input-label'>
+                Essay Text
+              </label>
+              <textarea
+                id='essay-text'
+                value={essayText}
+                onChange={(e) => setEssayText(e.target.value)}
+                className='essay-input'
+                placeholder='Paste your essay text here...'
+              />
+            </div>
 
-              <div className='input-actions'>
-                <button
-                  className={`generate-button ${
-                    isGenerating ? 'generating' : ''
-                  }`}
-                  onClick={handleGenerateFeedback}
-                  disabled={isGenerating || !essayText.trim()}
-                >
-                  {isGenerating ? 'Generating...' : 'Generate Feedback'}
-                </button>
-              </div>
+            <div className='input-actions'>
+              <button
+                className={`generate-button ${
+                  isGenerating ? 'generating' : ''
+                }`}
+                onClick={handleGenerateFeedback}
+                disabled={isGenerating || !essayText.trim()}
+              >
+                {isGenerating ? 'Generating...' : 'Generate Feedback'}
+              </button>
             </div>
           </div>
-          
-          {/* Right column - Output section */}
-          <div className='column-container'>
-            <div className='output-section'>
-              <div className='output-container'>
-                <div className='output-header'>
-                  <h2 className='output-title'>Feedback</h2>
-                  {feedback && (
-                    <button
-                      className='download-button'
-                      onClick={handleDownloadFeedback}
-                    >
-                      Download
-                    </button>
-                  )}
-                </div>
 
-                <div className='feedback-output'>
-                  {feedback ? (
-                    <pre className='feedback-content'>{feedback}</pre>
-                  ) : (
-                    <div className='feedback-placeholder'>
-                      <div className='placeholder-icon'>🔍</div>
-                      <p className='placeholder-text'>
-                        Your feedback will appear here after you generate it.
-                      </p>
-                    </div>
-                  )}
-                </div>
+          <div className='output-section'>
+            <div className='output-container'>
+              <div className='output-header'>
+                <h2 className='output-title'>Feedback</h2>
+                {feedback && (
+                  <button
+                    className='download-button'
+                    onClick={handleDownloadFeedback}
+                  >
+                    Download
+                  </button>
+                )}
+              </div>
+
+              <div className='feedback-output'>
+                {feedback ? (
+                  <pre className='feedback-content'>{feedback}</pre>
+                ) : (
+                  <div className='feedback-placeholder'>
+                    <div className='placeholder-icon'>🔍</div>
+                    <p className='placeholder-text'>
+                      Your feedback will appear here after you generate it.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
