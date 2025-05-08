@@ -1,17 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import './essay_test.css'  
+import GrammarHighlighter from '../grammar-check/components/GrammarHighlighter'
 
 export default function EssayFeedbackPage() {
   const [essayTitle, setEssayTitle] = useState('')
   const [essayText, setEssayText] = useState('')
   const [feedback, setFeedback] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [showGrammarCheck, setShowGrammarCheck] = useState(false)
+  const essayInputRef = useRef(null)
 
   const handleGenerateFeedback = () => {
     setIsGenerating(true)
+
+    // Enable grammar checking when feedback is generated
+    setShowGrammarCheck(true)
 
     // Simulating API call or processing delay
     setTimeout(() => {
@@ -115,12 +121,12 @@ GRADE ESTIMATE: B+
                 <label htmlFor='essay-text' className='input-label'>
                   Essay Text
                 </label>
-                <textarea
-                  id='essay-text'
-                  value={essayText}
+                <GrammarHighlighter 
+                  text={essayText}
+                  textareaRef={essayInputRef}
                   onChange={(e) => setEssayText(e.target.value)}
-                  className='essay-input'
                   placeholder='Paste your essay text here...'
+                  enableChecking={showGrammarCheck}
                 />
               </div>
 
@@ -132,7 +138,7 @@ GRADE ESTIMATE: B+
                   onClick={handleGenerateFeedback}
                   disabled={isGenerating || !essayText.trim()}
                 >
-                  {isGenerating ? 'Generating...' : 'Generate Feedback'}
+                  {isGenerating ? 'Generating...' : showGrammarCheck ? 'Regenerate Feedback' : 'Generate Feedback'}
                 </button>
               </div>
             </div>
