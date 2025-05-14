@@ -1,3 +1,5 @@
+/* styles.module.css */
+
 /* Global Styles */
 :root {
     --yellow-primary: #fcd34d;
@@ -23,7 +25,7 @@ body {
     color: black;
 }
 
-.app-container {
+.appContainer {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -36,7 +38,7 @@ body {
     padding: 12px 24px;
 }
 
-.header-container {
+.headerContainer {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -44,19 +46,19 @@ body {
     align-items: center;
 }
 
-.logo-container {
+.logoContainer {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-.edu-logo {
+.eduLogo {
     display: flex;
     align-items: center;
     cursor: pointer;
 }
 
-.edu-icon {
+.eduIcon {
     background-color: #8b5cf6;
     color: white;
     padding: 4px;
@@ -64,12 +66,12 @@ body {
     font-size: 18px;
 }
 
-.edu-text {
+.eduText {
     font-weight: bold;
     margin-left: 8px;
 }
 
-.durham-logo {
+.durhamLogo {
     background-color: #dbeafe;
     color: #3b82f6;
     padding: 4px 8px;
@@ -78,17 +80,17 @@ body {
     font-weight: bold;
 }
 
-.header-actions {
+.headerActions {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-.search-container {
+.searchContainer {
     position: relative;
 }
 
-.search-input {
+.searchInput {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 6px 12px;
@@ -97,7 +99,7 @@ body {
     outline: none;
 }
 
-.search-button {
+.searchButton {
     position: absolute;
     right: 8px;
     top: 50%;
@@ -111,7 +113,7 @@ body {
     cursor: pointer;
 }
 
-.search-results {
+.searchResults {
     position: absolute;
     top: 100%;
     left: 0;
@@ -126,17 +128,17 @@ body {
     overflow-y: auto;
 }
 
-.search-result-item {
+.searchResultItem {
     padding: 8px 12px;
     cursor: pointer;
     font-size: 14px;
 }
 
-.search-result-item:hover {
+.searchResultItem:hover {
     background-color: #f9fafb;
 }
 
-.header-button {
+.headerButton {
     border: 1px solid #e5e7eb;
     background-color: transparent;
     padding: 8px 12px;
@@ -146,7 +148,7 @@ body {
     cursor: pointer;
 }
 
-.header-button:hover {
+.headerButton:hover {
     background-color: #f9fafb;
 }
 
@@ -156,7 +158,7 @@ body {
     padding: 16px 0;
 }
 
-.banner-container {
+.bannerContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
@@ -165,14 +167,14 @@ body {
     position: relative;
 }
 
-.banner-title {
+.bannerTitle {
     font-size: 28px;
     font-weight: bold;
     text-align: center;
     margin: 0;
 }
 
-.banner-icon {
+.bannerIcon {
     position: absolute;
     right: 24px;
     top: 50%;
@@ -180,7 +182,7 @@ body {
     font-size: 24px;
 }
 
-.banner-back-arrow {
+.bannerBackArrow {
     position: absolute;
     left: 24px;
     top: 50%;
@@ -190,36 +192,32 @@ body {
     font-weight: bold;
     padding: 8px;
     transition: all 0.2s ease;
-  }
+}
   
-  .banner-back-arrow:hover {
+.bannerBackArrow:hover {
     color: var(--yellow-dark);
     transform: translateY(-50%) scale(1.1);
-  }
-  
-  .banner-container {
-    position: relative; /* Add this to existing banner-container */
-  }
+}
 
 /* Home Page Styles */
-.home-content {
+.homeContent {
     flex: 1;
 }
 
-.main-container {
+.mainContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px;
 }
 
-.search-intro {
+.searchIntro {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.telescope-icon {
+.telescopeIcon {
     background-color: var(--yellow-primary);
     font-size: 32px;
     width: 80px;
@@ -231,14 +229,14 @@ body {
     margin-bottom: 24px;
 }
 
-.search-prompt {
+.searchPrompt {
     font-size: 18px;
     color: #4b5563;
     text-align: center;
     margin-bottom: 32px;
 }
 
-.info-categories {
+.infoCategories {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
@@ -247,18 +245,18 @@ body {
 }
 
 @media (min-width: 768px) {
-    .info-categories {
+    .infoCategories {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
-.info-category {
+.infoCategory {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.category-icon {
+.categoryIcon {
     width: 64px;
     height: 64px;
     border-radius: 50%;
@@ -269,61 +267,45 @@ body {
     margin-bottom: 8px;
 }
 
-.category-icon.green {
+.green {
     background-color: var(--green-light);
 }
 
-.category-icon.blue {
+.blue {
     background-color: var(--blue-light);
 }
 
-.category-icon.yellow {
+.yellow {
     background-color: var(--yellow-light);
 }
 
-.category-icon.purple {
+.purple {
     background-color: var(--purple-light);
 }
 
-.category-text {
+.categoryText {
     text-align: center;
 }
 
-.category-title {
+.categoryTitle {
     font-weight: 500;
 }
 
-.category-subtitle {
+.categorySubtitle {
     font-weight: 500;
 }
 
-.category-subtitle.green {
-    color: var(--green-text);
-}
-
-.category-subtitle.blue {
-    color: var(--blue-text);
-}
-
-.category-subtitle.yellow {
-    color: var(--yellow-text);
-}
-
-.category-subtitle.purple {
-    color: var(--purple-text);
-}
-
-.main-search {
+.mainSearch {
     max-width: 600px;
     margin: 0 auto;
     position: relative;
 }
 
-.main-search-form {
+.mainSearchForm {
     position: relative;
 }
 
-.main-search-input {
+.mainSearchInput {
     width: 100%;
     padding: 12px 16px;
     padding-right: 48px;
@@ -333,7 +315,7 @@ body {
     outline: none;
 }
 
-.main-search-button {
+.mainSearchButton {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -351,14 +333,14 @@ body {
     font-size: 18px;
 }
 
-.search-note {
+.searchNote {
     text-align: center;
     font-size: 12px;
     color: #6b7280;
     margin-top: 8px;
 }
 
-.main-search-results {
+.mainSearchResults {
     margin-top: 8px;
     background-color: white;
     border: 1px solid #e5e7eb;
@@ -366,26 +348,26 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.main-search-result-item {
+.mainSearchResultItem {
     padding: 12px 16px;
     cursor: pointer;
     border-bottom: 1px solid #f3f4f6;
 }
 
-.main-search-result-item:last-child {
+.mainSearchResultItem:last-child {
     border-bottom: none;
 }
 
-.main-search-result-item:hover {
+.mainSearchResultItem:hover {
     background-color: #f9fafb;
 }
 
 /* School Page Styles */
-.school-content {
+.schoolContent {
     flex: 1;
 }
 
-.info-link {
+.infoLink {
     font-size: 14px;
     color: #4b5563;
     margin-bottom: 16px;
@@ -401,7 +383,7 @@ body {
 }
 
 /* Comparison Styles */
-.compare-box {
+.compareBox {
     background-color: #fef3c0;
     border-radius: 8px;
     padding: 16px;
@@ -413,17 +395,17 @@ body {
     transition: all 0.2s ease;
 }
 
-.compare-box:hover {
+.compareBox:hover {
     background-color: var(--yellow-light);
     border-color: #d0d0d0;
 }
 
-.compare-text {
+.compareText {
     font-weight: 600;
     color: #555;
 }
 
-.compare-button {
+.compareButton {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -439,12 +421,12 @@ body {
     transition: all 0.2s ease;
 }
 
-.compare-button:hover {
+.compareButton:hover {
     background-color: #3a5fc6;
     transform: scale(1.05);
 }
 
-.compare-search-box {
+.compareSearchBox {
     display: flex;
     background-color: var(--yellow-light);
     align-items: center;
@@ -455,7 +437,7 @@ body {
     position: relative;
 }
 
-.compare-search-input {
+.compareSearchInput {
     background-color: var(--yellow-light);
     flex: 1;
     padding: 10px 15px;
@@ -464,7 +446,7 @@ body {
     font-size: 14px;
 }
 
-.compare-cancel-button {
+.compareCancelButton {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -479,7 +461,7 @@ body {
     margin-left: 10px;
 }
 
-.compare-search-results {
+.compareSearchResults {
     position: absolute;
     top: 100%;
     left: 0;
@@ -493,32 +475,32 @@ body {
     overflow-y: auto;
 }
 
-.compare-search-result-item {
+.compareSearchResultItem {
     padding: 10px 15px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
 }
 
-.compare-search-result-item:last-child {
+.compareSearchResultItem:last-child {
     border-bottom: none;
 }
 
-.compare-search-result-item:hover {
+.compareSearchResultItem:hover {
     background-color: #f5f5f5;
 }
 
-.comparison-view {
+.comparisonView {
     width: 100%;
 }
 
-.schools-header {
+.schoolsHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.school-header-item {
+.schoolHeaderItem {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -526,28 +508,28 @@ body {
     text-align: center;
 }
 
-.vs-indicator {
+.vsIndicator {
     font-weight: bold;
     font-size: 18px;
     color: #555;
     margin: 0 20px;
 }
 
-.comparison-stats {
+.comparisonStats {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
 }
 
-.comparison-stat-card {
+.comparisonStatCard {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.stat-title {
+.statTitle {
     font-weight: bold;
     font-size: 16px;
     margin-bottom: 15px;
@@ -555,20 +537,20 @@ body {
     text-align: center;
 }
 
-.stat-comparison {
+.statComparison {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.stat-school-1, .stat-school-2 {
+.statSchool1, .statSchool2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 40%;
 }
 
-.stat-difference {
+.statDifference {
     flex: 1;
     text-align: center;
     padding: 0 15px;
@@ -576,62 +558,62 @@ body {
     font-weight: 600;
 }
 
-.stat-value {
+.statValue {
     font-size: 24px;
     font-weight: bold;
     color: #333;
 }
 
-.stat-label {
+.statLabel {
     font-size: 13px;
     color: #777;
     margin-top: 5px;
 }
 
-.more-debt, .more-time, .more-cost, .more-students, .more-ratio {
+.moreDebt, .moreTime, .moreCost, .moreStudents, .moreRatio {
     color: var(--red);
 }
 
-.less-debt, .less-time, .less-cost, .less-students, .less-ratio {
+.lessDebt, .lessTime, .lessCost, .lessStudents, .lessRatio {
     color: var(--green);
 }
 
-.more-earnings, .more-advantage, .more-diverse {
+.moreEarnings, .moreAdvantage, .moreDiverse {
     color: var(--green);
 }
 
-.less-earnings, .less-advantage, .less-diverse {
+.lessEarnings, .lessAdvantage, .lessDiverse {
     color: var(--red);
 }
 
 @media (max-width: 768px) {
-    .schools-header {
+    .schoolsHeader {
         flex-direction: column;
         gap: 15px;
     }
     
-    .vs-indicator {
+    .vsIndicator {
         margin: 10px 0;
     }
     
-    .stat-comparison {
+    .statComparison {
         flex-direction: column;
         gap: 10px;
     }
     
-    .stat-school-1, .stat-school-2, .stat-difference {
+    .statSchool1, .statSchool2, .statDifference {
         width: 100%;
     }
 }
 
 /* Existing School Page Styles */
-.school-header {
+.schoolHeader {
     display: flex;
     align-items: center;
     margin-bottom: 24px;
 }
 
-.school-icon {
+.schoolIcon {
     background-color: var(--purple-light);
     width: 48px;
     height: 48px;
@@ -643,7 +625,7 @@ body {
     margin-right: 16px;
 }
 
-.school-name {
+.schoolName {
     font-size: 24px;
     font-weight: bold;
     color: var(--purple-text);
@@ -651,16 +633,16 @@ body {
     margin-right: 12px;
 }
 
-.school-location {
+.schoolLocation {
     font-size: 14px;
     color: #6b7280;
 }
 
-.school-tabs {
+.schoolTabs {
     margin-bottom: 24px;
 }
 
-.tabs-container {
+.tabsContainer {
     display: flex;
     overflow-x: auto;
     margin-bottom: 2px;
@@ -679,50 +661,36 @@ body {
     color: #4b5563;
 }
 
-.tab.active-tab {
+.activeTab {
     background-color: var(--yellow-light);
     color: #4b5563;
 }
 
-.tab-content {
+.tabContent {
     background-color: white;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 24px;
 }
 
-.stat-cards {
+.statCards {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
 }
 
 @media (min-width: 768px) {
-    .stat-cards {
+    .statCards {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-.stat-card {
+.statCard {
     text-align: center;
     padding: 16px;
 }
 
-.stat-value {
-    font-size: 28px;
-    font-weight: bold;
-    color: var(--yellow-dark);
-    margin-bottom: 4px;
-}
-
-.stat-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4b5563;
-    margin-bottom: 16px;
-}
-
-.info-icon {
+.infoIcon {
     background-color: var(--yellow-light);
     width: 32px;
     height: 32px;
@@ -733,19 +701,19 @@ body {
     margin: 0 auto 16px;
 }
 
-.stat-description {
+.statDescription {
     font-size: 13px;
     color: #6b7280;
     line-height: 1.4;
 }
 
-.action-buttons {
+.actionButtons {
     display: flex;
     justify-content: flex-end;
     margin-top: 24px;
 }
 
-.action-button {
+.actionButton {
     background-color: var(--yellow-primary);
     color: #4b5563;
     border: none;
@@ -756,24 +724,38 @@ body {
     cursor: pointer;
 }
 
-.coming-soon {
+.comingSoon {
     text-align: center;
     padding: 48px 0;
 }
 
-.coming-soon-icon {
+.comingSoonIcon {
     font-size: 48px;
     margin-bottom: 16px;
 }
 
-.coming-soon-text {
+.comingSoonText {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-.coming-soon-description {
+.comingSoonDescription {
     color: #6b7280;
+}
+
+/* Comparison-specific tab content areas */
+.comparisonFinancialInfo, 
+.comparisonValueInfo, 
+.comparisonDemographicsInfo {
+    width: 100%;
+}
+
+/* Regular tab content areas */
+.financialInfo, 
+.valueInfo, 
+.demographicsInfo {
+    width: 100%;
 }
 
 /* Footer Styles */
@@ -784,20 +766,20 @@ body {
     margin-top: auto;
 }
 
-.footer-container {
+.footerContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
 }
 
-.footer-links {
+.footerLinks {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 24px;
 }
 
-.footer-link {
+.footerLink {
     display: flex;
     align-items: center;
     color: #4b5563;
@@ -805,11 +787,11 @@ body {
     font-size: 14px;
 }
 
-.footer-link:hover {
+.footerLink:hover {
     text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-.footer-icon {
+.footerIcon {
     margin-right: 8px;
 }

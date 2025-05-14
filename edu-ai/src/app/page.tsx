@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import collegeData, { College } from './collegeData';
-import './styles.css';
+import styles from './styles.module.css';
 
 import Link from 'next/link'; // Add this for Essay Feedback link
 
@@ -120,109 +120,109 @@ export default function CollegeInfoApp() {
   ];
 
   return (
-    <div className="app-container">
-      <header className="header">
-        <div className="header-container">
-          <div className="logo-container">
-            <div className="edu-logo" onClick={returnToHome}>
-              <span className="edu-icon">👨‍🎓</span>
-              <span className="edu-text">EDU AI</span>
+    <div className={styles.appContainer}>
+      <header className={styles.header}>
+        <div className={styles.headerContainer}>
+          <div className={styles.logoContainer}>
+            <div className={styles.eduLogo} onClick={returnToHome}>
+              <span className={styles.eduIcon}>👨‍🎓</span>
+              <span className={styles.eduText}>EDU AI</span>
             </div>
-            <div className="durham-logo">
+            <div className={styles.durhamLogo}>
               <span>DURHAM</span>
             </div>
           </div>
           
-          <div className="header-actions">
-            <div className="search-container">
+          <div className={styles.headerActions}>
+            <div className={styles.searchContainer}>
               <form onSubmit={handleHeaderSearch}>
                 <input
                   type="text"
                   value={headerSearch}
                   onChange={(e) => setHeaderSearch(e.target.value)}
-                  className="search-input"
+                  className={styles.searchInput}
                   placeholder="Search..."
                 />
-                <button type="submit" className="search-button">→</button>
+                <button type="submit" className={styles.searchButton}>→</button>
               </form>
             </div>
-            <button className="header-button">ESSAY FAQ</button>
+            <button className={styles.headerButton}>ESSAY FAQ</button>
             
-            <Link href="/essay-feedback" className="header-button">
-    ESSAY FEEDBACK
-    </Link>
-            <button className="header-button">FINANCIAL AID GUIDE</button>
+            <Link href="/essay-feedback" className={styles.headerButton}>
+              ESSAY FEEDBACK
+            </Link>
+            <button className={styles.headerButton}>FINANCIAL AID GUIDE</button>
           </div>
         </div>
       </header>
       
       {currentPage === 'home' ? (
-        <div className="home-content">
-          <div className="banner">
-            <div className="banner-container">
-              <h1 className="banner-title">FIND COLLEGE INFO</h1>
+        <div className={styles.homeContent}>
+          <div className={styles.banner}>
+            <div className={styles.bannerContainer}>
+              <h1 className={styles.bannerTitle}>FIND COLLEGE INFO</h1>
             </div>
           </div>
           
-          <div className="main-container">
-            <div className="search-intro">
-              <div className="telescope-icon">🔭</div>
-              <h2 className="search-prompt">Type in a school's name to find information about...</h2>
+          <div className={styles.mainContainer}>
+            <div className={styles.searchIntro}>
+              <div className={styles.telescopeIcon}>🔭</div>
+              <h2 className={styles.searchPrompt}>Type in a school's name to find information about...</h2>
               
-              <div className="info-categories">
-              <div className="info-category">
-                  <div className="category-icon green">💰</div>
-                  <div className="category-text">
-                    <div className="category-title">Debt, Aid,</div>
-                    <div className="category-subtitle green">Scholarships</div>
+              <div className={styles.infoCategories}>
+                <div className={styles.infoCategory}>
+                  <div className={`${styles.categoryIcon} ${styles.green}`}>💰</div>
+                  <div className={styles.categoryText}>
+                    <div className={styles.categoryTitle}>Debt, Aid,</div>
+                    <div className={`${styles.categorySubtitle} ${styles.green}`}>Scholarships</div>
                   </div>
                 </div>
                 
-                <div className="info-category">
-                  <div className="category-icon blue">👥</div>
-                  <div className="category-text">
-                    <div className="category-title">College</div>
-                    <div className="category-subtitle blue">Demographics</div>
+                <div className={styles.infoCategory}>
+                  <div className={`${styles.categoryIcon} ${styles.blue}`}>👥</div>
+                  <div className={styles.categoryText}>
+                    <div className={styles.categoryTitle}>College</div>
+                    <div className={`${styles.categorySubtitle} ${styles.blue}`}>Demographics</div>
                   </div>
                 </div>
                 
-                <div className="info-category">
-                  <div className="category-icon yellow">📋</div>
-                  <div className="category-text">
-                    <div className="category-title">Chances of</div>
-                    <div className="category-subtitle yellow">Admission</div>
+                <div className={styles.infoCategory}>
+                  <div className={`${styles.categoryIcon} ${styles.yellow}`}>📋</div>
+                  <div className={styles.categoryText}>
+                    <div className={styles.categoryTitle}>Chances of</div>
+                    <div className={`${styles.categorySubtitle} ${styles.yellow}`}>Admission</div>
                   </div>
                 </div>
                 
-                <div className="info-category">
-                  <div className="category-icon purple">👣</div>
-                  <div className="category-text">
-                    <div className="category-title">Steps to</div>
-                    <div className="category-subtitle purple">Apply</div>
+                <div className={styles.infoCategory}>
+                  <div className={`${styles.categoryIcon} ${styles.purple}`}>👣</div>
+                  <div className={styles.categoryText}>
+                    <div className={styles.categoryTitle}>Steps to</div>
+                    <div className={`${styles.categorySubtitle} ${styles.purple}`}>Apply</div>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="main-search">
-              <form onSubmit={handleCollegeSearch} className="main-search-form">
+            <div className={styles.mainSearch}>
+              <form onSubmit={handleCollegeSearch} className={styles.mainSearchForm}>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="main-search-input"
+                  className={styles.mainSearchInput}
                   placeholder="SEARCH SCHOOL..."
                 />
-                <button type="submit" className="main-search-button">🔍</button>
+                <button type="submit" className={styles.mainSearchButton}>🔍</button>
               </form>
-              <p className="search-note">**Information available for 15-20 most popular universities in Durham</p>
+              <p className={styles.searchNote}>**Information available for 15-20 most popular universities in Durham</p>
               
               {filteredColleges.length > 0 && (
-                <div className="main-search-results">
+                <div className={styles.mainSearchResults}>
                   {filteredColleges.map((college) => (
                     <div 
                       key={college.UNITID} 
-                      className="main-search-result-item"
+                      className={styles.mainSearchResultItem}
                       onClick={() => selectCollege(college)}
                     >
                       {college.INSTNM} - {college.CITY}, {college.STABBR}
@@ -234,38 +234,38 @@ export default function CollegeInfoApp() {
           </div>
         </div>
       ) : (
-        <div className="school-content">
-          <div className="banner">
-            <div className="banner-container">
+        <div className={styles.schoolContent}>
+          <div className={styles.banner}>
+            <div className={styles.bannerContainer}>
               <div 
-                className="banner-back-arrow"
+                className={styles.bannerBackArrow}
                 onClick={returnToHome}
               >
                 ←
               </div>
-              <h1 className="banner-title">FIND COLLEGE INFO</h1>
-              {!compareMode && <div className="banner-icon">🎓</div>}
+              <h1 className={styles.bannerTitle}>FIND COLLEGE INFO</h1>
+              {!compareMode && <div className={styles.bannerIcon}>🎓</div>}
             </div>
           </div>
           
-          <div className="main-container">
-            <p className="info-link">
+          <div className={styles.mainContainer}>
+            <p className={styles.infoLink}>
               Click to explore more tuition, financial aid, & demographic info about any college:{' '} 
-              <a href="https://collegescorecard.ed.gov/" className="link">https://collegescorecard.ed.gov/</a>
+              <a href="https://collegescorecard.ed.gov/" className={styles.link}>https://collegescorecard.ed.gov/</a>
             </p>
             
             {showCompareSearch ? (
-              <div className="compare-search-box">
+              <div className={styles.compareSearchBox}>
                 <input
                   type="text"
                   value={compareSearchQuery}
                   onChange={(e) => setCompareSearchQuery(e.target.value)}
-                  className="compare-search-input"
+                  className={styles.compareSearchInput}
                   placeholder="Search for a school to compare..."
                   autoFocus
                 />
                 <button 
-                  className="compare-cancel-button" 
+                  className={styles.compareCancelButton} 
                   onClick={() => {
                     setShowCompareSearch(false);
                     resetComparison();
@@ -275,11 +275,11 @@ export default function CollegeInfoApp() {
                 </button>
                 
                 {compareFilteredColleges.length > 0 && (
-                  <div className="compare-search-results">
+                  <div className={styles.compareSearchResults}>
                     {compareFilteredColleges.map((college) => (
                       <div 
                         key={college.UNITID} 
-                        className="compare-search-result-item"
+                        className={styles.compareSearchResultItem}
                         onClick={() => selectComparisonCollege(college)}
                       >
                         {college.INSTNM} - {college.CITY}, {college.STABBR}
@@ -289,12 +289,12 @@ export default function CollegeInfoApp() {
                 )}
               </div>
             ) : (
-              <div className="compare-box" onClick={!comparisonSchool ? toggleCompareSearch : undefined}>
-                <div className="compare-text">
+              <div className={styles.compareBox} onClick={!comparisonSchool ? toggleCompareSearch : undefined}>
+                <div className={styles.compareText}>
                   {comparisonSchool ? `COMPARING WITH: ${comparisonSchool.INSTNM}` : 'ADD SCHOOL TO COMPARE...'}
                 </div>
                 <button 
-                  className="compare-button"
+                  className={styles.compareButton}
                   onClick={(e) => {
                     e.stopPropagation();
                     comparisonSchool ? resetComparison() : toggleCompareSearch();
@@ -306,118 +306,118 @@ export default function CollegeInfoApp() {
             )}
             
             {compareMode && comparisonSchool ? (
-              <div className="comparison-view">
-              <div className="schools-header">
-                  <div className="school-header-item">
-                    <div className="school-icon">🎓</div>
-                    <h2 className="school-name">{selectedSchool?.INSTNM}</h2>
-                    <div className="school-location">{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
+              <div className={styles.comparisonView}>
+                <div className={styles.schoolsHeader}>
+                  <div className={styles.schoolHeaderItem}>
+                    <div className={styles.schoolIcon}>🎓</div>
+                    <h2 className={styles.schoolName}>{selectedSchool?.INSTNM}</h2>
+                    <div className={styles.schoolLocation}>{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
                   </div>
-                  <div className="vs-indicator">VS.</div>
-                  <div className="school-header-item">
-                    <div className="school-icon">🎓</div>
-                    <h2 className="school-name">{comparisonSchool.INSTNM}</h2>
-                    <div className="school-location">{comparisonSchool.CITY}, {comparisonSchool.STABBR}</div>
+                  <div className={styles.vsIndicator}>VS.</div>
+                  <div className={styles.schoolHeaderItem}>
+                    <div className={styles.schoolIcon}>🎓</div>
+                    <h2 className={styles.schoolName}>{comparisonSchool.INSTNM}</h2>
+                    <div className={styles.schoolLocation}>{comparisonSchool.CITY}, {comparisonSchool.STABBR}</div>
                   </div>
                 </div>
                 
-                <div className="school-tabs">
-                  <div className="tabs-container">
+                <div className={styles.schoolTabs}>
+                  <div className={styles.tabsContainer}>
                     {schoolTabs.map((tab) => (
                       <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`tab ${activeTab === tab ? 'active-tab' : ''}`}
+                        className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
                       >
                         {tab}
                       </button>
                     ))}
                   </div>
                   
-                  <div className="tab-content">
+                  <div className={styles.tabContent}>
                     {activeTab === 'COST OF ENROLLMENT' && (
-                      <div className="comparison-financial-info">
+                      <div className={styles.comparisonFinancialInfo}>
                         {selectedSchool && comparisonSchool && (
                           <>
-                            <div className="comparison-stats">
-                              <div className="comparison-stat-card">
-                                <div className="stat-title">AVG. DEBT</div>
-                                <div className="stat-comparison">
-                                  <div className="stat-school-1">
-                                    <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgDebt}</div>
-                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                            <div className={styles.comparisonStats}>
+                              <div className={styles.comparisonStatCard}>
+                                <div className={styles.statTitle}>AVG. DEBT</div>
+                                <div className={styles.statComparison}>
+                                  <div className={styles.statSchool1}>
+                                    <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).avgDebt}</div>
+                                    <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                   </div>
-                                  <div className="stat-difference">
+                                  <div className={styles.statDifference}>
                                     {getMockData(selectedSchool.INSTNM).avgDebt > getMockData(comparisonSchool.INSTNM).avgDebt ? (
-                                      <div className="more-debt">
+                                      <div className={styles.moreDebt}>
                                         ${getMockData(selectedSchool.INSTNM).avgDebt - getMockData(comparisonSchool.INSTNM).avgDebt} MORE
                                       </div>
                                     ) : (
-                                      <div className="less-debt">
+                                      <div className={styles.lessDebt}>
                                         ${getMockData(comparisonSchool.INSTNM).avgDebt - getMockData(selectedSchool.INSTNM).avgDebt} LESS
                                       </div>
                                     )}
                                   </div>
-                                  <div className="stat-school-2">
-                                    <div className="stat-value">${getMockData(comparisonSchool.INSTNM).avgDebt}</div>
-                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                  <div className={styles.statSchool2}>
+                                    <div className={styles.statValue} >${getMockData(comparisonSchool.INSTNM).avgDebt}</div>
+                                    <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
                               
-                              <div className="comparison-stat-card">
-                                <div className="stat-title">AVG. REPAY TIME</div>
-                                <div className="stat-comparison">
-                                  <div className="stat-school-1">
-                                    <div className="stat-value">{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
-                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                              <div className={styles.comparisonStatCard}>
+                                <div className={styles.statTitle}>AVG. REPAY TIME</div>
+                                <div className={styles.statComparison}>
+                                  <div className={styles.statSchool1}>
+                                    <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
+                                    <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                   </div>
-                                  <div className="stat-difference">
+                                  <div className={styles.statDifference}>
                                     {getMockData(selectedSchool.INSTNM).avgRepayTime > getMockData(comparisonSchool.INSTNM).avgRepayTime ? (
-                                      <div className="more-time">
+                                      <div className={styles.moreTime}>
                                         {getMockData(selectedSchool.INSTNM).avgRepayTime - getMockData(comparisonSchool.INSTNM).avgRepayTime} YEARS MORE
                                       </div>
                                     ) : (
-                                      <div className="less-time">
+                                      <div className={styles.lessTime}>
                                         {getMockData(comparisonSchool.INSTNM).avgRepayTime - getMockData(selectedSchool.INSTNM).avgRepayTime} YEARS LESS
                                       </div>
                                     )}
                                   </div>
-                                  <div className="stat-school-2">
-                                    <div className="stat-value">{getMockData(comparisonSchool.INSTNM).avgRepayTime} years</div>
-                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                  <div className={styles.statSchool2}>
+                                    <div className={styles.statValue}>{getMockData(comparisonSchool.INSTNM).avgRepayTime} years</div>
+                                    <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
                               
-                              <div className="comparison-stat-card">
-                                <div className="stat-title">AVG. MONTHLY RATE</div>
-                                <div className="stat-comparison">
-                                  <div className="stat-school-1">
-                                    <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
-                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                              <div className={styles.comparisonStatCard}>
+                                <div className={styles.statTitle}>AVG. MONTHLY RATE</div>
+                                <div className={styles.statComparison}>
+                                  <div className={styles.statSchool1}>
+                                    <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
+                                    <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                   </div>
-                                  <div className="stat-difference">
+                                  <div className={styles.statDifference}>
                                     {getMockData(selectedSchool.INSTNM).avgMonthlyRate > getMockData(comparisonSchool.INSTNM).avgMonthlyRate ? (
-                                      <div className="more-cost">
+                                      <div className={styles.moreCost}>
                                         ${getMockData(selectedSchool.INSTNM).avgMonthlyRate - getMockData(comparisonSchool.INSTNM).avgMonthlyRate} MORE
                                       </div>
                                     ) : (
-                                      <div className="less-cost">
+                                      <div className={styles.lessCost}>
                                         ${getMockData(comparisonSchool.INSTNM).avgMonthlyRate - getMockData(selectedSchool.INSTNM).avgMonthlyRate} LESS
                                       </div>
                                     )}
                                   </div>
-                                  <div className="stat-school-2">
-                                    <div className="stat-value">${getMockData(comparisonSchool.INSTNM).avgMonthlyRate}</div>
-                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                  <div className={styles.statSchool2}>
+                                    <div className={styles.statValue}>${getMockData(comparisonSchool.INSTNM).avgMonthlyRate}</div>
+                                    <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             
-                            <div className="action-buttons">
-                              <button className="action-button">VIEW EXPECTED AID</button>
+                            <div className={styles.actionButtons}>
+                              <button className={styles.actionButton}>VIEW EXPECTED AID</button>
                             </div>
                           </>
                         )}
@@ -425,55 +425,55 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {activeTab === 'WHAT\'S THE VALUE OF GOING' && (
-                      <div className="comparison-value-info">
+                      <div className={styles.comparisonValueInfo}>
                         {selectedSchool && comparisonSchool && (
-                          <div className="comparison-stats">
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">MEDIAN EARNINGS</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
-                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                          <div className={styles.comparisonStats}>
+                            <div className={styles.comparisonStatCard}>
+                              <div className={styles.statTitle}>MEDIAN EARNINGS</div>
+                              <div className={styles.statComparison}>
+                                <div className={styles.statSchool1}>
+                                  <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
+                                  <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                 </div>
-                                <div className="stat-difference">
+                                <div className={styles.statDifference}>
                                   {getMockData(selectedSchool.INSTNM).medianEarnings > getMockData(comparisonSchool.INSTNM).medianEarnings ? (
-                                    <div className="more-earnings">
+                                    <div className={styles.moreEarnings}>
                                       ${getMockData(selectedSchool.INSTNM).medianEarnings - getMockData(comparisonSchool.INSTNM).medianEarnings} MORE
                                     </div>
                                   ) : (
-                                    <div className="less-earnings">
+                                    <div className={styles.lessEarnings}>
                                       ${getMockData(comparisonSchool.INSTNM).medianEarnings - getMockData(selectedSchool.INSTNM).medianEarnings} LESS
                                     </div>
                                   )}
                                 </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">${getMockData(comparisonSchool.INSTNM).medianEarnings}</div>
-                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                <div className={styles.statSchool2}>
+                                  <div className={styles.statValue}>${getMockData(comparisonSchool.INSTNM).medianEarnings}</div>
+                                  <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
                             
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">EARNINGS ADVANTAGE</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
-                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                            <div className={styles.comparisonStatCard}>
+                              <div className={styles.statTitle}>EARNINGS ADVANTAGE</div>
+                              <div className={styles.statComparison}>
+                                <div className={styles.statSchool1}>
+                                  <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
+                                  <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                 </div>
-                                <div className="stat-difference">
+                                <div className={styles.statDifference}>
                                   {getMockData(selectedSchool.INSTNM).earningAdvantage > getMockData(comparisonSchool.INSTNM).earningAdvantage ? (
-                                    <div className="more-advantage">
+                                    <div className={styles.moreAdvantage}>
                                       {getMockData(selectedSchool.INSTNM).earningAdvantage - getMockData(comparisonSchool.INSTNM).earningAdvantage}% MORE
                                     </div>
                                   ) : (
-                                    <div className="less-advantage">
+                                    <div className={styles.lessAdvantage}>
                                       {getMockData(comparisonSchool.INSTNM).earningAdvantage - getMockData(selectedSchool.INSTNM).earningAdvantage}% LESS
                                     </div>
                                   )}
                                 </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).earningAdvantage}%</div>
-                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                <div className={styles.statSchool2}>
+                                  <div className={styles.statValue}>{getMockData(comparisonSchool.INSTNM).earningAdvantage}%</div>
+                                  <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
@@ -483,80 +483,80 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {activeTab === 'DEMOGRAPHICS' && (
-                      <div className="comparison-demographics-info">
+                      <div className={styles.comparisonDemographicsInfo}>
                         {selectedSchool && comparisonSchool && (
-                          <div className="comparison-stats">
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">TOTAL ENROLLMENT</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
-                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                          <div className={styles.comparisonStats}>
+                            <div className={styles.comparisonStatCard}>
+                              <div className={styles.statTitle}>TOTAL ENROLLMENT</div>
+                              <div className={styles.statComparison}>
+                                <div className={styles.statSchool1}>
+                                  <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
+                                  <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                 </div>
-                                <div className="stat-difference">
+                                <div className={styles.statDifference}>
                                   {getMockData(selectedSchool.INSTNM).totalEnrollment > getMockData(comparisonSchool.INSTNM).totalEnrollment ? (
-                                    <div className="more-students">
+                                    <div className={styles.moreStudents}>
                                       {getMockData(selectedSchool.INSTNM).totalEnrollment - getMockData(comparisonSchool.INSTNM).totalEnrollment} MORE
                                     </div>
                                   ) : (
-                                    <div className="less-students">
+                                    <div className={styles.lessStudents}>
                                       {getMockData(comparisonSchool.INSTNM).totalEnrollment - getMockData(selectedSchool.INSTNM).totalEnrollment} LESS
                                     </div>
                                   )}
                                 </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).totalEnrollment}</div>
-                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                <div className={styles.statSchool2}>
+                                  <div className={styles.statValue}>{getMockData(comparisonSchool.INSTNM).totalEnrollment}</div>
+                                  <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
                             
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">DIVERSITY INDEX</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
-                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                            <div className={styles.comparisonStatCard}>
+                              <div className={styles.statTitle}>DIVERSITY INDEX</div>
+                              <div className={styles.statComparison}>
+                                <div className={styles.statSchool1}>
+                                  <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
+                                  <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                 </div>
-                                <div className="stat-difference">
+                                <div className={styles.statDifference}>
                                   {getMockData(selectedSchool.INSTNM).diversityIndex > getMockData(comparisonSchool.INSTNM).diversityIndex ? (
-                                    <div className="more-diverse">
+                                    <div className={styles.moreDiverse}>
                                       {getMockData(selectedSchool.INSTNM).diversityIndex - getMockData(comparisonSchool.INSTNM).diversityIndex}% MORE
                                     </div>
                                   ) : (
-                                    <div className="less-diverse">
+                                    <div className={styles.lessDiverse}>
                                       {getMockData(comparisonSchool.INSTNM).diversityIndex - getMockData(selectedSchool.INSTNM).diversityIndex}% LESS
                                     </div>
                                   )}
                                 </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).diversityIndex}%</div>
-                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                <div className={styles.statSchool2}>
+                                  <div className={styles.statValue}>{getMockData(comparisonSchool.INSTNM).diversityIndex}%</div>
+                                  <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
                             
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">STUDENT:FACULTY RATIO</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
-                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                            <div className={styles.comparisonStatCard}>
+                              <div className={styles.statTitle}>STUDENT:FACULTY RATIO</div>
+                              <div className={styles.statComparison}>
+                                <div className={styles.statSchool1}>
+                                  <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
+                                  <div className={styles.statLabel}>{selectedSchool.INSTNM}</div>
                                 </div>
-                                <div className="stat-difference">
+                                <div className={styles.statDifference}>
                                   {getMockData(selectedSchool.INSTNM).studentFacultyRatio > getMockData(comparisonSchool.INSTNM).studentFacultyRatio ? (
-                                    <div className="more-ratio">
+                                    <div className={styles.moreRatio}>
                                       {getMockData(selectedSchool.INSTNM).studentFacultyRatio - getMockData(comparisonSchool.INSTNM).studentFacultyRatio} MORE
                                     </div>
                                   ) : (
-                                    <div className="less-ratio">
+                                    <div className={styles.lessRatio}>
                                       {getMockData(comparisonSchool.INSTNM).studentFacultyRatio - getMockData(selectedSchool.INSTNM).studentFacultyRatio} LESS
                                     </div>
                                   )}
                                 </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).studentFacultyRatio}:1</div>
-                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
+                                <div className={styles.statSchool2}>
+                                  <div className={styles.statValue}>{getMockData(comparisonSchool.INSTNM).studentFacultyRatio}:1</div>
+                                  <div className={styles.statLabel}>{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
@@ -566,10 +566,10 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {(activeTab === 'SCHOLARSHIPS' || activeTab === 'STEPS TO APPLY') && (
-                      <div className="coming-soon">
-                        <div className="coming-soon-icon">🚧</div>
-                        <h3 className="coming-soon-text">Coming Soon</h3>
-                        <p className="coming-soon-description">
+                      <div className={styles.comingSoon}>
+                        <div className={styles.comingSoonIcon}>🚧</div>
+                        <h3 className={styles.comingSoonText}>Coming Soon</h3>
+                        <p className={styles.comingSoonDescription}>
                           We're working on gathering detailed information for this section.
                         </p>
                       </div>
@@ -579,89 +579,88 @@ export default function CollegeInfoApp() {
               </div>
             ) : (
               <>
-                <div className="school-header">
-                  <div className="school-icon">🎓</div>
-                  <h2 className="school-name">{selectedSchool?.INSTNM}</h2>
-                  <div className="school-location">{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
+                <div className={styles.schoolHeader}>
+                  <div className={styles.schoolIcon}>🎓</div>
+                  <h2 className={styles.schoolName}>{selectedSchool?.INSTNM}</h2>
+                  <div className={styles.schoolLocation}>{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
                 </div>
                 
-                <div className="school-tabs">
-                  <div className="tabs-container">
+                <div className={styles.schoolTabs}>
+                  <div className={styles.tabsContainer}>
                     {schoolTabs.map((tab) => (
                       <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`tab ${activeTab === tab ? 'active-tab' : ''}`}
+                        className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
                       >
                         {tab}
                       </button>
                     ))}
                   </div>
                   
-                  <div className="tab-content">
-                  {activeTab === 'COST OF ENROLLMENT' && selectedSchool && (
-                      <div className="financial-info">
-                        <div className="stat-cards">
-                          <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgDebt}</div>
-                            <div className="stat-label">AVG. DEBT</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
+                  <div className={styles.tabContent}>
+                    {activeTab === 'COST OF ENROLLMENT' && selectedSchool && (
+                      <div className={styles.financialInfo}>
+                        <div className={styles.statCards}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).avgDebt}</div>
+                            <div className={styles.statLabel}>AVG. DEBT</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
                               The typical {selectedSchool.INSTNM} student receives federal aid to help with college costs.
                             </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
-                            <div className="stat-label">AVG. REPAY TIME</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
-                              The typical {selectedSchool.INSTNM} student pays off their debt in this timeframe.
-                            </p>
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
+                            <div className={styles.statLabel}>AVG. REPAY TIME</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
+                              The typical {selectedSchool.INSTNM} student pays off their debt in this timeframe. </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
-                            <div className="stat-label">AVG. MONTHLY RATE</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
+                            <div className={styles.statLabel}>AVG. MONTHLY RATE</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
                               The typical {selectedSchool.INSTNM} student pays this amount monthly. This requires less than 5% of annual income.
                             </p>
                           </div>
                         </div>
                         
-                        <div className="action-buttons">
-                          <button className="action-button">VIEW EXPECTED AID</button>
+                        <div className={styles.actionButtons}>
+                          <button className={styles.actionButton}>VIEW EXPECTED AID</button>
                         </div>
                       </div>
                     )}
                     
                     {activeTab === 'WHAT\'S THE VALUE OF GOING' && selectedSchool && (
-                      <div className="value-info">
-                        <div className="stat-cards">
-                          <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
-                            <div className="stat-label">MEDIAN EARNINGS</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
+                      <div className={styles.valueInfo}>
+                        <div className={styles.statCards}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
+                            <div className={styles.statLabel}>MEDIAN EARNINGS</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
                               The median earnings of {selectedSchool.INSTNM} graduates 10 years after graduation.
                             </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).nationalMedian}</div>
-                            <div className="stat-label">NATIONAL MEDIAN</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>${getMockData(selectedSchool.INSTNM).nationalMedian}</div>
+                            <div className={styles.statLabel}>NATIONAL MEDIAN</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
                               The national median earnings for all college graduates 10 years after graduation.
                             </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
-                            <div className="stat-label">EARNINGS ADVANTAGE</div>
-                            <div className="info-icon">💡</div>
-                            <p className="stat-description">
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
+                            <div className={styles.statLabel}>EARNINGS ADVANTAGE</div>
+                            <div className={styles.infoIcon}>💡</div>
+                            <p className={styles.statDescription}>
                               Percentage of {selectedSchool.INSTNM} graduates who earn more than high school graduates.
                             </p>
                           </div>
@@ -670,31 +669,31 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {activeTab === 'DEMOGRAPHICS' && selectedSchool && (
-                      <div className="demographics-info">
-                        <div className="stat-cards">
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
-                            <div className="stat-label">TOTAL ENROLLMENT</div>
-                            <div className="info-icon">📊</div>
-                            <p className="stat-description">
+                      <div className={styles.demographicsInfo}>
+                        <div className={styles.statCards}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
+                            <div className={styles.statLabel}>TOTAL ENROLLMENT</div>
+                            <div className={styles.infoIcon}>📊</div>
+                            <p className={styles.statDescription}>
                               Total undergraduate students enrolled at {selectedSchool.INSTNM}.
                             </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
-                            <div className="stat-label">DIVERSITY INDEX</div>
-                            <div className="info-icon">👥</div>
-                            <p className="stat-description">
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
+                            <div className={styles.statLabel}>DIVERSITY INDEX</div>
+                            <div className={styles.infoIcon}>👥</div>
+                            <p className={styles.statDescription}>
                               Measure of racial and ethnic diversity at {selectedSchool.INSTNM}.
                             </p>
                           </div>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
-                            <div className="stat-label">STUDENT:FACULTY RATIO</div>
-                            <div className="info-icon">👩‍🏫</div>
-                            <p className="stat-description">
+                          <div className={styles.statCard}>
+                            <div className={styles.statValue}>{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
+                            <div className={styles.statLabel}>STUDENT:FACULTY RATIO</div>
+                            <div className={styles.infoIcon}>👩‍🏫</div>
+                            <p className={styles.statDescription}>
                               The ratio of students to faculty at {selectedSchool.INSTNM}.
                             </p>
                           </div>
@@ -703,10 +702,10 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {(activeTab === 'SCHOLARSHIPS' || activeTab === 'STEPS TO APPLY') && (
-                      <div className="coming-soon">
-                        <div className="coming-soon-icon">🚧</div>
-                        <h3 className="coming-soon-text">Coming Soon</h3>
-                        <p className="coming-soon-description">
+                      <div className={styles.comingSoon}>
+                        <div className={styles.comingSoonIcon}>🚧</div>
+                        <h3 className={styles.comingSoonText}>Coming Soon</h3>
+                        <p className={styles.comingSoonDescription}>
                           We're working on gathering detailed information for this section.
                         </p>
                       </div>

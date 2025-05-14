@@ -1,5 +1,6 @@
 // components/GrammarHighlighter.js
 'use client';
+import React from 'react';
 
 import { useEffect, useRef, useState } from 'react';
 import { useGrammarCheck } from '../hooks/useGrammarCheck';
