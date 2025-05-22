@@ -14,6 +14,9 @@ export default function ServicesPage() {
             <MenuItem label="ABOUT" icon="/images/about.png" />
             <MenuItem label="TOOLS" icon="/images/tools.png" hasChildren>
               <SubItem label="ESSAY" icon="/images/essay.png" />
+              <Link href="/essay-feedback" className={styles.headerButton}>
+              ESSAY FEEDBACK
+            </Link>
               <SubItem label="RESUME" icon="/images/resume.png" />
               <SubItem label="SCHOOL INFO" icon="/images/school.png" />
             </MenuItem>
