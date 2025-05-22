@@ -22,7 +22,8 @@ export async function POST(request: Request) {
     // Create the prompt for Claude
     const systemPrompt = `You are a supportive academic writing assistant who provides detailed feedback on essays. 
       Your feedback should be constructive, specific, and actionable.
-      Always write what sentences or words are wrong.
+      Always write what sentences or words are wrong or need improvement and the reason.
+      Don't write an example of how student could revise an essay for them.
       Include sections for GRAMMAR, STRUCTURE, CONTENT, LANGUAGE, OVERALL assessment.`;
       
     const userPrompt = `Please provide feedback on my essay titled "${title}": \n\n${essay}`;

@@ -71,7 +71,7 @@ export default function EssayFeedbackPage() {
 
     try {
       // Make the actual API call to our route
-      const response = await fetch('/api/generate-feedback', {
+      const response = await fetch('/essay/api/generate-feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,13 +110,13 @@ export default function EssayFeedbackPage() {
 
     switch (format) {
       case 'txt':
-        downloadAsTxt(essayTitle || 'Untitled Essay', feedback);
+        downloadAsTxt(essayTitle || 'Untitled Essay',  essayText, feedback);
         break;
       case 'doc':
-        downloadAsDoc(essayTitle || 'Untitled Essay', feedback);
+        downloadAsDoc(essayTitle || 'Untitled Essay',  essayText, feedback);
         break;
       case 'pdf':
-        downloadAsPdf(essayTitle || 'Untitled Essay', feedback);
+        downloadAsPdf(essayTitle || 'Untitled Essay',  essayText, feedback);
         break;
       default:
         console.error("Unknown format:", format);
@@ -137,6 +137,20 @@ export default function EssayFeedbackPage() {
       );
     } 
     
+    if (isGenerating) {
+    return (
+      <div className={styles.loadingContainer} role="status" aria-live="polite">
+        <div className={styles.loadingSpinner} aria-hidden="true"></div>
+        <div className={styles.loadingMessage}>
+          <p className={styles.loadingTitle}>Analyzing your essay and generating thoughtful feedback...</p>
+          <p className={styles.loadingDetails}>This typically takes 1-2 minutes depending on essay length.</p>
+          <p className={styles.loadingWarning}>
+            <strong>Please don't close this page.</strong></p>
+        </div>
+      </div>
+    );
+  }
+
     if (feedback) {
       return <pre className={styles.feedbackContent}>{feedback}</pre>;
     } 
@@ -232,24 +246,70 @@ export default function EssayFeedbackPage() {
             <div className={styles.inputSection}>
               {/* Essay Title Input */}
               <div className={styles.inputContainerTitle}>
-                <label htmlFor='essay-title' className={styles.inputLabel}>
-                  Essay Title
-                </label>
+                <div className={styles.titleLabelContainer}>
+                  <label htmlFor='essay-title' className={styles.inputLabel}>
+                    Essay Title
+                  </label>
+                  <div className={styles.infoButtonWrapper}>
+                    <button 
+                      className={styles.infoButton}
+                      type="button"
+                      aria-label="Essay title format information"
+                    >
+                      <span className={styles.infoIcon}>i</span>
+                    </button>
+                    <div className={styles.tooltip}>
+                      <p>Recommendation: Include the word count in your title.</p>
+                      <p className={styles.tooltipExample}>Example: "What five words best describe you? (5 words)"</p>
+                    </div>
+                  </div>
+                </div>
                 <input
                   id='essay-title'
                   type='text'
                   value={essayTitle}
                   onChange={(e) => setEssayTitle(e.target.value)}
                   className={styles.titleInput}
-                  placeholder='Enter your essay title here...'
+                  placeholder='Example: How did you spend your last two summers? (50 words)'
                 />
               </div>
 
               {/* Essay Text Input with Grammar Checking */}
               <div className={styles.inputContainerEssay}>
-                <label htmlFor='essay-text' className={styles.inputLabel}>
-                  Essay Text
-                </label>
+                <div className={styles.titleLabelContainer}>
+                  <label htmlFor='essay-text' className={styles.inputLabel}>
+                    Essay Text
+                  </label>
+                  <div className={styles.infoButtonWrapper}>
+                    <button 
+                      className={styles.infoButton}
+                      type="button"
+                      aria-label="Personal information warning"
+                    >
+                      <span className={styles.infoIcon}>i</span>
+                    </button>
+                    <div className={styles.tooltip}>
+                      <p className={styles.tooltipWarning}>
+                        <span className={styles.warningIcon}>⚠️</span> <strong>Privacy Warning</strong>
+                      </p>
+                      <p>
+                        Do not include personal information such as your name, address, phone number, or email in your essay.
+                      </p>
+                      <p className={styles.tooltipReason}>
+                        <strong>Why this matters:</strong> Information submitted to AI systems may be:
+                      </p>
+                      <ul className={styles.tooltipList}>
+                        <li>Stored in databases that could be accessed later</li>
+                        <li>Used to train future AI models</li>
+                        <li>Potentially vulnerable to privacy breaches</li>
+                        <li>Difficult or impossible to completely remove once submitted</li>
+                      </ul>
+                      <p className={styles.tooltipTip}>
+                        <strong>Tip:</strong> Use pseudonyms or general descriptions instead of specific personal details.
+                      </p>
+                    </div>
+                  </div>
+                </div>
                 <GrammarHighlighter 
                   text={essayText}
                   textareaRef={essayInputRef}
