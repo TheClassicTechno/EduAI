@@ -1,92 +1,22 @@
 "use client";
 
-<<<<<<< HEAD
 import { useState, useEffect } from 'react';
-/*import collegeData, { College } from './collegeData';*/
+import collegeData, { College } from './collegeData';
 import './styles.css';
-import Papa from 'papaparse';
-
-type SchoolData = {
-  NAME: string;
-  WEBSITE_LINK: string;
-  AVG_DEBT: string;
-  AVG_MONTHLY_REPAY: string;
-  FINANCIAL_AID_CALC: string;
-  SCHOOL_MEDIAN_EARNINGS: string;
-  NATIONAL_4_YEAR_MEDIAN: string;
-  EARNINGS_VS_HS_GRAD: number;
-  WHITE_POP: number;
-  BLACK_POP: number;
-  HISPANIC_POP: number;
-  ASIAN_POP: number;
-  HAWAIIAN_PACIFIC_ISLANDER_POP: number;
-  MULTIRACIAL_POP: number;
-  UNKNOWN_RACE_POP: number;
-  INTERNATIONAL_POP: number;
-  COST_AFTER_AID_0_30: string;
-  COST_AFTER_AID_30_48: string;
-  COST_AFTER_AID_48_75: string;
-  COST_AFTER_AID_75_110: string;
-  COST_AFTER_AID_110: string;
-  MONTHLY_REPAY_PERCENTAGE: number;
-};
-
 
 export default function CollegeInfoApp() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState('home');
-  const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
-  const [comparisonSchool, setComparisonSchool] = useState<SchoolData | null>(null);
+  const [selectedSchool, setSelectedSchool] = useState<College | null>(null);
+  const [comparisonSchool, setComparisonSchool] = useState<College | null>(null);
   const [activeTab, setActiveTab] = useState('COST OF ENROLLMENT');
-  const [filteredColleges, setFilteredColleges] = useState<SchoolData[]>([]);
+  const [filteredColleges, setFilteredColleges] = useState<College[]>([]);
   const [headerSearch, setHeaderSearch] = useState('');
   const [compareMode, setCompareMode] = useState(false);
   const [compareSearchQuery, setCompareSearchQuery] = useState('');
-  const [compareFilteredColleges, setCompareFilteredColleges] = useState<SchoolData[]>([]);
+  const [compareFilteredColleges, setCompareFilteredColleges] = useState<College[]>([]);
   const [showCompareSearch, setShowCompareSearch] = useState(false);
-  const [csvData, setCsvData] = useState<SchoolData[]>([]); // Moved here from SchoolDataViewer
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Load CSV data on component mount
-  useEffect(() => {
-    const loadCsvData = async () => {
-      try {
-        const response = await fetch('/empowering_educ_data.csv');
-        const text = await response.text();
-        Papa.parse(text, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (result) => {
-            setCsvData(result.data as SchoolData[]);
-            setIsLoading(false);
-          },
-          error: (err: any) => {
-            console.error('CSV parsing error:', err);
-            setIsLoading(false);
-          }
-        });
-      } catch (err) {
-        console.error('Failed to load CSV:', err);
-        setIsLoading(false);
-      }
-    };
-
-    loadCsvData();
-  }, []);
-
-  // Update filtered colleges when search query changes
-  useEffect(() => {
-    if (searchQuery.length > 2 && csvData.length > 0) {
-      const filtered = csvData.filter(college => 
-        college.NAME.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 5);
-      setFilteredColleges(filtered);
-    } else {
-      setFilteredColleges([]);
-    }
-  }, [searchQuery, csvData]);
-
-  /*
   useEffect(() => {
     if (searchQuery.length > 2) {
       const filtered = collegeData.filter(college => 
@@ -98,26 +28,11 @@ export default function CollegeInfoApp() {
     }
   }, [searchQuery]);
 
-  const loadCsvData = (): Promise<any[]> => {
-    return new Promise((resolve, reject) => {
-      fetch('public/empowering_educ_data.csv')
-        .then((res) => res.text())
-        .then((text) => {
-          Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-            complete: (result) => resolve(result.data),
-            error: (err: Error) => reject(err),
-          });
-        });
-    });
-  };*/
-
   useEffect(() => {
     if (compareSearchQuery.length > 2) {
-      const filtered = csvData.filter(college => 
-        college.NAME.toLowerCase().includes(compareSearchQuery.toLowerCase()) &&
-        (!selectedSchool/* || college.UNITID !== selectedSchool.UNITID*/)
+      const filtered = collegeData.filter(college => 
+        college.INSTNM.toLowerCase().includes(compareSearchQuery.toLowerCase()) &&
+        (!selectedSchool || college.UNITID !== selectedSchool.UNITID)
       ).slice(0, 5);
       setCompareFilteredColleges(filtered);
     } else {
@@ -140,7 +55,7 @@ export default function CollegeInfoApp() {
     setHeaderSearch('');
   };
 
-  const selectCollege = (college: SchoolData) => {
+  const selectCollege = (college: College) => {
     setSelectedSchool(college);
     setCurrentPage('school');
     setActiveTab('COST OF ENROLLMENT');
@@ -148,14 +63,13 @@ export default function CollegeInfoApp() {
     setFilteredColleges([]);
   };
 
-  /*
   const selectComparisonCollege = (college: College) => {
     setComparisonSchool(college);
     setCompareSearchQuery('');
     setCompareFilteredColleges([]);
     setShowCompareSearch(false);
     setCompareMode(true);
-  };*/
+  };
 
   const resetComparison = () => {
     setComparisonSchool(null);
@@ -179,47 +93,7 @@ export default function CollegeInfoApp() {
     }
   };
 
-
   const getMockData = (schoolName: string) => {
-    if (!csvData || csvData.length === 0) {
-      console.warn('CSV data not loaded yet.');
-      return null;
-    }
-  
-    const row = csvData.find(
-      (college) => college.NAME?.toLowerCase().trim() === schoolName.toLowerCase().trim()
-    );
-  
-    if (!row) {
-      console.warn(`No data found for school: ${schoolName}`);
-      return null;
-    }
-  
-    return {
-      NAME: schoolName,
-      WEBSITE_LINK: row.WEBSITE_LINK,
-      AVG_DEBT: (Math.round(Number(row.AVG_DEBT) * 100) / 100).toLocaleString('en-US'),
-      AVG_MONTHLY_REPAY: (Math.round(Number(row.AVG_MONTHLY_REPAY) * 100) / 100).toLocaleString('en-US'),
-      FINANCIAL_AID_CALC: Math.round(Number(row.FINANCIAL_AID_CALC) * 100) / 100,
-      SCHOOL_MEDIAN_EARNINGS: (Math.round(Number(row.SCHOOL_MEDIAN_EARNINGS) * 100) / 100).toLocaleString('en-US'),
-      NATIONAL_4_YEAR_MEDIAN: (Math.round(Number(row.NATIONAL_4_YEAR_MEDIAN) * 100) / 100).toLocaleString('en-US'),
-      EARNINGS_VS_HS_GRAD: Math.round(Number(row.EARNINGS_VS_HS_GRAD) * 100 * 100) / 100,
-      WHITE_POP: Math.round(Number(row.WHITE_POP)* 100 * 100) / 100,
-      BLACK_POP: Math.round(Number(row.BLACK_POP) * 100 * 100) / 100,
-      HISPANIC_POP: Math.round(Number(row.HISPANIC_POP) * 100 * 100) / 100,
-      ASIAN_POP: Math.round(Number(row.ASIAN_POP) * 100 * 100) / 100,
-      HAWAIIAN_PACIFIC_ISLANDER_POP: Math.round(Number(row.HAWAIIAN_PACIFIC_ISLANDER_POP) * 100 * 100) / 100,
-      MULTIRACIAL_POP: Math.round(Number(row.MULTIRACIAL_POP) * 100 * 100) / 100,
-      UNKNOWN_RACE_POP: Math.round(Number(row.UNKNOWN_RACE_POP) * 100 * 100) / 100,
-      INTERNATIONAL_POP: Math.round(Number(row.INTERNATIONAL_POP) * 100 * 100) / 100,
-      COST_AFTER_AID_0_30: (Number(row.COST_AFTER_AID_0_30)) .toLocaleString('en-US'),
-      COST_AFTER_AID_30_48: (Number(row.COST_AFTER_AID_30_48)).toLocaleString('en-US'),
-      COST_AFTER_AID_48_75: (Number(row.COST_AFTER_AID_48_75)).toLocaleString('en-US'),
-      COST_AFTER_AID_75_110: (Number(row.COST_AFTER_AID_75_110)).toLocaleString('en-US'),
-      COST_AFTER_AID_110: (Number(row.COST_AFTER_AID_110)).toLocaleString('en-US'),
-      MONTHLY_REPAY_PERCENTAGE: Math.round(Number(row.MONTHLY_REPAY_PERCENTAGE) * 100 * 100) / 100,
-    };
-    /*
     const nameSum = schoolName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
     const seed = nameSum % 1000;
     return {
@@ -232,7 +106,7 @@ export default function CollegeInfoApp() {
       totalEnrollment: Math.floor((seed * 41) % 30000) + 5000,
       diversityIndex: Math.floor((seed * 17) % 40) + 40,
       studentFacultyRatio: Math.floor((seed * 13) % 20) + 10
-    };*/
+    };
   };
 
   const schoolTabs = [
@@ -243,9 +117,7 @@ export default function CollegeInfoApp() {
     'STEPS TO APPLY'
   ];
 
-  
   return (
-    
     <div className="app-container">
       <header className="header">
         <div className="header-container">
@@ -343,11 +215,11 @@ export default function CollegeInfoApp() {
                 <div className="main-search-results">
                   {filteredColleges.map((college) => (
                     <div 
-                      key={college.NAME} 
+                      key={college.UNITID} 
                       className="main-search-result-item"
                       onClick={() => selectCollege(college)}
                     >
-                      {college.NAME}
+                      {college.INSTNM} - {college.CITY}, {college.STABBR}
                     </div>
                   ))}
                 </div>
@@ -400,11 +272,11 @@ export default function CollegeInfoApp() {
                   <div className="compare-search-results">
                     {compareFilteredColleges.map((college) => (
                       <div 
-                        key={college.NAME} 
+                        key={college.UNITID} 
                         className="compare-search-result-item"
-                        /*onClick={() => selectComparisonCollege(college)}*/
+                        onClick={() => selectComparisonCollege(college)}
                       >
-                        {college.NAME}
+                        {college.INSTNM} - {college.CITY}, {college.STABBR}
                       </div>
                     ))}
                   </div>
@@ -413,7 +285,7 @@ export default function CollegeInfoApp() {
             ) : (
               <div className="compare-box" onClick={!comparisonSchool ? toggleCompareSearch : undefined}>
                 <div className="compare-text">
-                  {comparisonSchool ? `COMPARING WITH: ${comparisonSchool.NAME}` : 'ADD SCHOOL TO COMPARE...'}
+                  {comparisonSchool ? `COMPARING WITH: ${comparisonSchool.INSTNM}` : 'ADD SCHOOL TO COMPARE...'}
                 </div>
                 <button 
                   className="compare-button"
@@ -432,14 +304,14 @@ export default function CollegeInfoApp() {
               <div className="schools-header">
                   <div className="school-header-item">
                     <div className="school-icon">🎓</div>
-                    <h2 className="school-name">{selectedSchool?.NAME}</h2>
-                    <div className="school-location">{selectedSchool?.NAME}, {selectedSchool?.NAME}</div>
+                    <h2 className="school-name">{selectedSchool?.INSTNM}</h2>
+                    <div className="school-location">{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
                   </div>
                   <div className="vs-indicator">VS.</div>
                   <div className="school-header-item">
                     <div className="school-icon">🎓</div>
-                    <h2 className="school-name">{comparisonSchool.NAME}</h2>
-                    <div className="school-location">{comparisonSchool.NAME}, {comparisonSchool.NAME}</div>
+                    <h2 className="school-name">{comparisonSchool.INSTNM}</h2>
+                    <div className="school-location">{comparisonSchool.CITY}, {comparisonSchool.STABBR}</div>
                   </div>
                 </div>
                 
@@ -466,12 +338,23 @@ export default function CollegeInfoApp() {
                                 <div className="stat-title">AVG. DEBT</div>
                                 <div className="stat-comparison">
                                   <div className="stat-school-1">
-                                    <div className="stat-value">${getMockData(selectedSchool?.NAME || '')?.AVG_DEBT}</div>
-                                    <div className="stat-label">{selectedSchool.NAME}</div>
-                                  </div> {/* ✅ this was missing */}
+                                    <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgDebt}</div>
+                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                  </div>
+                                  <div className="stat-difference">
+                                    {getMockData(selectedSchool.INSTNM).avgDebt > getMockData(comparisonSchool.INSTNM).avgDebt ? (
+                                      <div className="more-debt">
+                                        ${getMockData(selectedSchool.INSTNM).avgDebt - getMockData(comparisonSchool.INSTNM).avgDebt} MORE
+                                      </div>
+                                    ) : (
+                                      <div className="less-debt">
+                                        ${getMockData(comparisonSchool.INSTNM).avgDebt - getMockData(selectedSchool.INSTNM).avgDebt} LESS
+                                      </div>
+                                    )}
+                                  </div>
                                   <div className="stat-school-2">
-                                    <div className="stat-value">${getMockData(comparisonSchool.NAME)?.AVG_DEBT}</div>
-                                    <div className="stat-label">{comparisonSchool.NAME}</div>
+                                    <div className="stat-value">${getMockData(comparisonSchool.INSTNM).avgDebt}</div>
+                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
@@ -480,12 +363,23 @@ export default function CollegeInfoApp() {
                                 <div className="stat-title">AVG. REPAY TIME</div>
                                 <div className="stat-comparison">
                                   <div className="stat-school-1">
-                                    <div className="stat-value">{getMockData(selectedSchool.NAME)?.AVG_MONTHLY_REPAY} years</div>
-                                    <div className="stat-label">{selectedSchool.NAME}</div>
-                                  </div> {/* ✅ this was missing */}
+                                    <div className="stat-value">{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
+                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                  </div>
+                                  <div className="stat-difference">
+                                    {getMockData(selectedSchool.INSTNM).avgRepayTime > getMockData(comparisonSchool.INSTNM).avgRepayTime ? (
+                                      <div className="more-time">
+                                        {getMockData(selectedSchool.INSTNM).avgRepayTime - getMockData(comparisonSchool.INSTNM).avgRepayTime} YEARS MORE
+                                      </div>
+                                    ) : (
+                                      <div className="less-time">
+                                        {getMockData(comparisonSchool.INSTNM).avgRepayTime - getMockData(selectedSchool.INSTNM).avgRepayTime} YEARS LESS
+                                      </div>
+                                    )}
+                                  </div>
                                   <div className="stat-school-2">
-                                    <div className="stat-value">{getMockData(comparisonSchool.NAME)?.AVG_MONTHLY_REPAY} years</div>
-                                    <div className="stat-label">{comparisonSchool.NAME}</div>
+                                    <div className="stat-value">{getMockData(comparisonSchool.INSTNM).avgRepayTime} years</div>
+                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
@@ -494,12 +388,23 @@ export default function CollegeInfoApp() {
                                 <div className="stat-title">AVG. MONTHLY RATE</div>
                                 <div className="stat-comparison">
                                   <div className="stat-school-1">
-                                    <div className="stat-value">${getMockData(selectedSchool.NAME)?.AVG_MONTHLY_REPAY}</div>
-                                    <div className="stat-label">{selectedSchool.NAME}</div>
-                                  </div> {/* ✅ this was missing */}
+                                    <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
+                                    <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                  </div>
+                                  <div className="stat-difference">
+                                    {getMockData(selectedSchool.INSTNM).avgMonthlyRate > getMockData(comparisonSchool.INSTNM).avgMonthlyRate ? (
+                                      <div className="more-cost">
+                                        ${getMockData(selectedSchool.INSTNM).avgMonthlyRate - getMockData(comparisonSchool.INSTNM).avgMonthlyRate} MORE
+                                      </div>
+                                    ) : (
+                                      <div className="less-cost">
+                                        ${getMockData(comparisonSchool.INSTNM).avgMonthlyRate - getMockData(selectedSchool.INSTNM).avgMonthlyRate} LESS
+                                      </div>
+                                    )}
+                                  </div>
                                   <div className="stat-school-2">
-                                    <div className="stat-value">${getMockData(comparisonSchool.NAME)?.AVG_MONTHLY_REPAY}</div>
-                                    <div className="stat-label">{comparisonSchool.NAME}</div>
+                                    <div className="stat-value">${getMockData(comparisonSchool.INSTNM).avgMonthlyRate}</div>
+                                    <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                   </div>
                                 </div>
                               </div>
@@ -521,12 +426,23 @@ export default function CollegeInfoApp() {
                               <div className="stat-title">MEDIAN EARNINGS</div>
                               <div className="stat-comparison">
                                 <div className="stat-school-1">
-                                  <div className="stat-value">${getMockData(selectedSchool.NAME)?.SCHOOL_MEDIAN_EARNINGS}</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
+                                  <div className="stat-value">${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
+                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                </div>
+                                <div className="stat-difference">
+                                  {getMockData(selectedSchool.INSTNM).medianEarnings > getMockData(comparisonSchool.INSTNM).medianEarnings ? (
+                                    <div className="more-earnings">
+                                      ${getMockData(selectedSchool.INSTNM).medianEarnings - getMockData(comparisonSchool.INSTNM).medianEarnings} MORE
+                                    </div>
+                                  ) : (
+                                    <div className="less-earnings">
+                                      ${getMockData(comparisonSchool.INSTNM).medianEarnings - getMockData(selectedSchool.INSTNM).medianEarnings} LESS
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="stat-school-2">
-                                  <div className="stat-value">${getMockData(comparisonSchool.NAME)?.SCHOOL_MEDIAN_EARNINGS}</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
+                                  <div className="stat-value">${getMockData(comparisonSchool.INSTNM).medianEarnings}</div>
+                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
@@ -535,12 +451,23 @@ export default function CollegeInfoApp() {
                               <div className="stat-title">EARNINGS ADVANTAGE</div>
                               <div className="stat-comparison">
                                 <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.EARNINGS_VS_HS_GRAD}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
+                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                </div>
+                                <div className="stat-difference">
+                                  {getMockData(selectedSchool.INSTNM).earningAdvantage > getMockData(comparisonSchool.INSTNM).earningAdvantage ? (
+                                    <div className="more-advantage">
+                                      {getMockData(selectedSchool.INSTNM).earningAdvantage - getMockData(comparisonSchool.INSTNM).earningAdvantage}% MORE
+                                    </div>
+                                  ) : (
+                                    <div className="less-advantage">
+                                      {getMockData(comparisonSchool.INSTNM).earningAdvantage - getMockData(selectedSchool.INSTNM).earningAdvantage}% LESS
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.EARNINGS_VS_HS_GRAD}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).earningAdvantage}%</div>
+                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
@@ -554,43 +481,76 @@ export default function CollegeInfoApp() {
                         {selectedSchool && comparisonSchool && (
                           <div className="comparison-stats">
                             <div className="comparison-stat-card">
-                              <div className="stat-title">WHITE POP</div>
+                              <div className="stat-title">TOTAL ENROLLMENT</div>
                               <div className="stat-comparison">
                                 <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.WHITE_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
+                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                </div>
+                                <div className="stat-difference">
+                                  {getMockData(selectedSchool.INSTNM).totalEnrollment > getMockData(comparisonSchool.INSTNM).totalEnrollment ? (
+                                    <div className="more-students">
+                                      {getMockData(selectedSchool.INSTNM).totalEnrollment - getMockData(comparisonSchool.INSTNM).totalEnrollment} MORE
+                                    </div>
+                                  ) : (
+                                    <div className="less-students">
+                                      {getMockData(comparisonSchool.INSTNM).totalEnrollment - getMockData(selectedSchool.INSTNM).totalEnrollment} LESS
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.WHITE_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).totalEnrollment}</div>
+                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
                             
                             <div className="comparison-stat-card">
-                              <div className="stat-title">BLACK POP</div>
+                              <div className="stat-title">DIVERSITY INDEX</div>
                               <div className="stat-comparison">
                                 <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.BLACK_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
+                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                </div>
+                                <div className="stat-difference">
+                                  {getMockData(selectedSchool.INSTNM).diversityIndex > getMockData(comparisonSchool.INSTNM).diversityIndex ? (
+                                    <div className="more-diverse">
+                                      {getMockData(selectedSchool.INSTNM).diversityIndex - getMockData(comparisonSchool.INSTNM).diversityIndex}% MORE
+                                    </div>
+                                  ) : (
+                                    <div className="less-diverse">
+                                      {getMockData(comparisonSchool.INSTNM).diversityIndex - getMockData(selectedSchool.INSTNM).diversityIndex}% LESS
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.BLACK_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).diversityIndex}%</div>
+                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
                             
                             <div className="comparison-stat-card">
-                              <div className="stat-title">ASIAN POP</div>
+                              <div className="stat-title">STUDENT:FACULTY RATIO</div>
                               <div className="stat-comparison">
                                 <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.ASIAN_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
+                                  <div className="stat-label">{selectedSchool.INSTNM}</div>
+                                </div>
+                                <div className="stat-difference">
+                                  {getMockData(selectedSchool.INSTNM).studentFacultyRatio > getMockData(comparisonSchool.INSTNM).studentFacultyRatio ? (
+                                    <div className="more-ratio">
+                                      {getMockData(selectedSchool.INSTNM).studentFacultyRatio - getMockData(comparisonSchool.INSTNM).studentFacultyRatio} MORE
+                                    </div>
+                                  ) : (
+                                    <div className="less-ratio">
+                                      {getMockData(comparisonSchool.INSTNM).studentFacultyRatio - getMockData(selectedSchool.INSTNM).studentFacultyRatio} LESS
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.ASIAN_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
+                                  <div className="stat-value">{getMockData(comparisonSchool.INSTNM).studentFacultyRatio}:1</div>
+                                  <div className="stat-label">{comparisonSchool.INSTNM}</div>
                                 </div>
                               </div>
                             </div>
@@ -615,8 +575,8 @@ export default function CollegeInfoApp() {
               <>
                 <div className="school-header">
                   <div className="school-icon">🎓</div>
-                  <h2 className="school-name">{selectedSchool?.NAME}</h2>
-                  <div className="school-location">{selectedSchool?.NAME}, {selectedSchool?.NAME}</div>
+                  <h2 className="school-name">{selectedSchool?.INSTNM}</h2>
+                  <div className="school-location">{selectedSchool?.CITY}, {selectedSchool?.STABBR}</div>
                 </div>
                 
                 <div className="school-tabs">
@@ -637,37 +597,29 @@ export default function CollegeInfoApp() {
                       <div className="financial-info">
                         <div className="stat-cards">
                           <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.NAME)?.AVG_DEBT}</div>
+                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgDebt}</div>
                             <div className="stat-label">AVG. DEBT</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              The typical {selectedSchool.NAME} student takes out 
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> ${getMockData(selectedSchool.NAME)?.AVG_DEBT} </span> 
-                              of loans to help with college costs. This means they owe the government 
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> ${getMockData(selectedSchool.NAME)?.AVG_DEBT} </span> 
-                              after college.
+                              The typical {selectedSchool.INSTNM} student receives federal aid to help with college costs.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">{Math.round((Number(selectedSchool.AVG_DEBT) / Number(selectedSchool.AVG_MONTHLY_REPAY)) / 12)} years</div>
+                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).avgRepayTime} years</div>
                             <div className="stat-label">AVG. REPAY TIME</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              The typical {selectedSchool.NAME} student pays off their debt in 
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> {Math.round((Number(selectedSchool.AVG_DEBT) / Number(selectedSchool.AVG_MONTHLY_REPAY)) / 12)} years after graduating.</span>
+                              The typical {selectedSchool.INSTNM} student pays off their debt in this timeframe.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.NAME)?.AVG_MONTHLY_REPAY}</div>
+                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).avgMonthlyRate}</div>
                             <div className="stat-label">AVG. MONTHLY RATE</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              The typical {selectedSchool.NAME} student pays off
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> ${getMockData(selectedSchool.NAME)?.AVG_MONTHLY_REPAY} of their debt each month</span>
-                              . This requires less than
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> {getMockData(selectedSchool.NAME)?.MONTHLY_REPAY_PERCENTAGE}% of their annual income</span>.
+                              The typical {selectedSchool.INSTNM} student pays this amount monthly. This requires less than 5% of annual income.
                             </p>
                           </div>
                         </div>
@@ -682,34 +634,29 @@ export default function CollegeInfoApp() {
                       <div className="value-info">
                         <div className="stat-cards">
                           <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.NAME)?.SCHOOL_MEDIAN_EARNINGS}</div>
+                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).medianEarnings}</div>
                             <div className="stat-label">MEDIAN EARNINGS</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              The typical {selectedSchool.NAME} student makes about
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> ${getMockData(selectedSchool.NAME)?.SCHOOL_MEDIAN_EARNINGS} in a year after 10 years have passed </span>
-                              since they attended {selectedSchool.NAME}.
+                              The median earnings of {selectedSchool.INSTNM} graduates 10 years after graduation.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">${getMockData(selectedSchool.NAME)?.NATIONAL_4_YEAR_MEDIAN}</div>
+                            <div className="stat-value">${getMockData(selectedSchool.INSTNM).nationalMedian}</div>
                             <div className="stat-label">NATIONAL MEDIAN</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              The typical American citizen makes about
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> ${getMockData(selectedSchool.NAME)?.NATIONAL_4_YEAR_MEDIAN} in a year after 10 years have passed </span>
-                              since they attended college.
+                              The national median earnings for all college graduates 10 years after graduation.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.EARNINGS_VS_HS_GRAD}%</div>
+                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).earningAdvantage}%</div>
                             <div className="stat-label">EARNINGS ADVANTAGE</div>
                             <div className="info-icon">💡</div>
                             <p className="stat-description">
-                              About {getMockData(selectedSchool.NAME)?.EARNINGS_VS_HS_GRAD}% of students that attended {selectedSchool.NAME}
-                              <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> earn more than the typical high school graduate.</span>
+                              Percentage of {selectedSchool.INSTNM} graduates who earn more than high school graduates.
                             </p>
                           </div>
                         </div>
@@ -720,29 +667,29 @@ export default function CollegeInfoApp() {
                       <div className="demographics-info">
                         <div className="stat-cards">
                           <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.WHITE_POP}%</div>
-                            <div className="stat-label">WHITE POP</div>
+                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).totalEnrollment}</div>
+                            <div className="stat-label">TOTAL ENROLLMENT</div>
                             <div className="info-icon">📊</div>
                             <p className="stat-description">
-                              Total undergraduate students enrolled at {selectedSchool.NAME}.
+                              Total undergraduate students enrolled at {selectedSchool.INSTNM}.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.BLACK_POP}%</div>
-                            <div className="stat-label">BLACK POP</div>
+                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).diversityIndex}%</div>
+                            <div className="stat-label">DIVERSITY INDEX</div>
                             <div className="info-icon">👥</div>
                             <p className="stat-description">
-                              Measure of racial and ethnic diversity at {selectedSchool.NAME}.
+                              Measure of racial and ethnic diversity at {selectedSchool.INSTNM}.
                             </p>
                           </div>
                           
                           <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.ASIAN_POP}%</div>
-                            <div className="stat-label">ASIAN POP</div>
+                            <div className="stat-value">{getMockData(selectedSchool.INSTNM).studentFacultyRatio}:1</div>
+                            <div className="stat-label">STUDENT:FACULTY RATIO</div>
                             <div className="info-icon">👩‍🏫</div>
                             <p className="stat-description">
-                              The ratio of students to faculty at {selectedSchool.NAME}.
+                              The ratio of students to faculty at {selectedSchool.INSTNM}.
                             </p>
                           </div>
                         </div>
@@ -768,99 +715,3 @@ export default function CollegeInfoApp() {
     </div>
   );
 }
-=======
-import Link from "next/link";
-import React from "react";
-
-export default function ServicesPage() {
-  return (
-    <div className="flex min-h-screen font-sans">
-      {/* Sidebar */}
-      <aside className="w-64 bg-yellow-300 p-6">
-        <nav className="text-base">
-          <div className="flex flex-col gap-5">
-            <MenuItem label="HOME" icon="/images/home.png" />
-            <MenuItem label="ABOUT" icon="/images/about.png" />
-            <MenuItem label="TOOLS" icon="/images/tools.png" hasChildren>
-              <SubItem label="ESSAY" icon="/images/essay.png" />
-              <SubItem label="RESUME" icon="/images/resume.png" />
-              <SubItem label="SCHOOL INFO" icon="/images/school.png" />
-            </MenuItem>
-            <MenuItem label="GUIDES" icon="/images/guides.png" hasChildren>
-              <SubItem label="FAQ" icon="/images/faq.png" />
-              <SubItem label="FINANCIAL AID" icon="/images/aid.png" />
-            </MenuItem>
-          </div>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-10 bg-white">
-        <div className="flex flex-col items-center mt-24">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-6xl font-extrabold text-blue-900 tracking-wide">SERVICES</h1>
-          </div>
-          <p className="mt-4 text-xl font-semibold">HELP ME WITH...</p>
-        </div>
-
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-10 justify-items-center max-w-5xl mx-auto">
-          <ServiceCard
-            title="CREATING COLLEGE ESSAYS"
-            icon="/images/essay_editing.png"
-            linkTo="/essay"
-          />
-          <ServiceCard
-            title="WRITING RESUME / ACTIVITIES"
-            icon="/images/resume_editing.png"
-            linkTo="/resume"
-          />
-          <ServiceCard
-            title="FINDING SCHOOL INFO"
-            icon="/images/info.png"
-            linkTo="/school_info"
-          />
-        </div>
-      </main>
-    </div>
-  );
-}
-
-// Menu item in sidebar
-function MenuItem({ label, icon, hasChildren, children }) {
-  return (
-    <div>
-      <div className="flex items-center gap-2">
-        <img src={icon} alt={label} className="w-10 h-10 object-contain" />
-        <span className="font-semibold text-gray-800">{label}</span>
-      </div>
-      {hasChildren && (
-        <div className="ml-6 mt-1 space-y-1 text-sm text-gray-700">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Sub-item under TOOLS or GUIDES
-function SubItem({ label, icon }) {
-  return (
-    <div className="flex items-center gap-2 hover:underline cursor-pointer text-gray-700">
-      <img src={icon} alt={label} className="w-10 h-10 object-contain" />
-      <span>{label}</span>
-    </div>
-  );
-}
-
-// Service card with optional internal link
-function ServiceCard({ title, icon, linkTo }) {
-  const cardContent = (
-    <div className="w-64 h-64 flex flex-col items-center justify-start pt-5 px-4 shadow-md border border-gray-300 cursor-pointer hover:shadow-lg transition-shadow">
-      <img src={icon} alt={title} className="w-40 h-40 object-contain" />
-      <p className="text-center font-semibold text-sm px-2 mt-4">{title}</p>
-    </div>
-  );
-
-  return linkTo ? <Link href={linkTo}>{cardContent}</Link> : cardContent;
-}
->>>>>>> df8c598fd0db824ce89e3d6906f0320ebde0b0fe
