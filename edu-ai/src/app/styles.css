@@ -709,23 +709,23 @@ body {
 }
 
 .stat-value {
-    font-size: 28px;
+    font-size: 40px;
     font-weight: bold;
     color: var(--yellow-dark);
     margin-bottom: 4px;
 }
 
 .stat-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4b5563;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
     margin-bottom: 16px;
 }
 
 .info-icon {
-    background-color: var(--yellow-light);
-    width: 32px;
-    height: 32px;
+    background-color: var(--yellow-dark);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -734,9 +734,12 @@ body {
 }
 
 .stat-description {
-    font-size: 13px;
-    color: #6b7280;
+    font-size: 15px;
+    font-weight: bold;
+    color: #406A7C;
     line-height: 1.4;
+    max-width: 300px;
+    margin: 0 auto;
 }
 
 .action-buttons {
