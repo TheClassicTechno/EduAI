@@ -1,221 +1,362 @@
 "use client";
 
-import React, { useState } from 'react';
+// -----------------------------------------------------------------------------
+// ResumePage.tsx – client‑only résumé builder
+// -----------------------------------------------------------------------------
+
+import React, { useState } from "react";
+import "../school_info/styles.css";
+
+/* ---------- Types ---------- */
+interface Activity {
+  activityType: string;
+  position: string;
+  organization: string;
+  description: string;
+  grades: string[];
+  dates: string;
+  location: string;
+}
+
+/* ---------- Helper ---------- */
+const newActivity = (): Activity => ({
+  activityType: "",
+  position: "",
+  organization: "",
+  description: "",
+  grades: [],
+  dates: "",
+  location: "",
+});
 
 export default function ResumePage() {
-  const [currentTab, setCurrentTab] = useState<'input' | 'feedback' | 'resume'>('input');
-
-  const [activities, setActivities] = useState([
-    {
-      activityType: '',
-      position: '',
-      organization: '',
-      description: '',
-      grades: [],
-    },
-  ]);
-
+  /* --------------- State --------------- */
+  const [student, setStudent] = useState({ name: "", email: "", phone: "" });
   const [education, setEducation] = useState({
-    school: '',
-    awards: '',
-    gpa: '',
+    school: "",
+    gpa: "",
+    awards: "",
   });
+  const [skills, setSkills] = useState("");
+  const [headerSearch, setHeaderSearch] = useState("");
+  const handleHeaderSearch = (e: React.FormEvent) => e.preventDefault();
+  const returnToHome = () => {};   
+  const [activities, setActivities] = useState<Activity[]>([newActivity()]);
 
-  const handleActivityChange = (index, e) => {
-    const { name, value, type, checked } = e.target;
+  /* ------------- Handlers -------------- */
+  const handleStudent = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setStudent({ ...student, [e.target.name]: e.target.value });
+
+  const handleEducation = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setEducation({ ...education, [e.target.name]: e.target.value });
+
+  const handleActivity = (
+    idx: number,
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     setActivities((prev) => {
-      const updated = [...prev];
-      if (type === 'checkbox') {
-        const grades = updated[index].grades;
-        updated[index].grades = checked
-          ? [...grades, value]
-          : grades.filter((g) => g !== value);
+      const list = [...prev];
+      if (type === "checkbox") {
+        const s = new Set(list[idx].grades);
+        checked ? s.add(value) : s.delete(value);
+        list[idx].grades = Array.from(s);
       } else {
-        updated[index][name] = value;
+        // @ts-ignore dynamic assignment
+        list[idx][name] = value;
       }
-      return updated;
+      return list;
     });
   };
 
-  const addActivity = () => {
-    if (activities.length < 10) {
-      setActivities((prev) => [...prev, {
-        activityType: '',
-        position: '',
-        organization: '',
-        description: '',
-        grades: [],
-      }]);
-    }
-  };
+  const addActivity = () =>
+    activities.length < 10 && setActivities((p) => [...p, newActivity()]);
 
-  const removeActivity = (index) => {
-    setActivities((prev) => prev.filter((_, i) => i !== index));
-  };
+  const removeActivity = (i: number) =>
+    setActivities((p) => p.filter((_, j) => j !== i));
 
-  const handleEducationChange = (e) => {
-    const { name, value } = e.target;
-    setEducation((prev) => ({ ...prev, [name]: value }));
-  };
+  /* -------- Preview (forwardRef) -------- */
+  const Preview: React.FC = () => (
+  <div className="bg-white max-w-3xl mx-auto p-6 font-sans text-sm leading-relaxed">
+    {/* Header */}
+    <div className="flex justify-between items-center">
+      <h1 className="text-2xl font-bold">{student.name || "Student Name"}</h1>
+      <div className="text-right text-gray-600 text-sm whitespace-pre-line">
+        {(student.email || "email@example.com") +
+          "\n" +
+          (student.phone || "555‑123‑4567")}
+      </div>
+    </div>
 
-  const handleGetFeedback = () => {
-    setCurrentTab('feedback');
-  };
+    {/* Education */}
+    <h2 className="mt-6 mb-1 font-semibold text-lg border-b">Education</h2>
+    <div className="flex justify-between">
+      <span className="font-medium">
+        {education.school || "[School Name]"}
+      </span>
+      {education.gpa && (
+        <span className="text-gray-600">GPA: {education.gpa}</span>
+      )}
+    </div>
+    {education.awards && <p>Awards: {education.awards}</p>}
 
-  const handleTabSwitch = (tab) => {
-    if (tab !== 'input') {
-      setCurrentTab(tab);
-    }
-  };
+    {/* Activities */}
+    <h2 className="mt-6 mb-1 font-semibold text-lg border-b">Activities</h2>
+    {activities.map((a, i) =>
+      a.position || a.organization || a.description ? (
+        <div key={i} className="mb-3">
+          <div className="flex justify-between">
+            <div>
+              <p className="font-medium">
+                {a.position || "[Role]"}
+                {a.organization && `, ${a.organization}`}
+                {a.activityType &&
+                  !["Club", "Volunteering", "Sports", "Internship", "Research", "Job", "Other"].includes(a.activityType) &&
+                  ` — ${a.activityType}`}
+              </p>
+              <p>{a.description}</p>
+              {a.grades.length > 0 && (
+                <p className="text-xs text-gray-600">
+                  Grades: {a.grades.join(", ")}
+                </p>
+              )}
+            </div>
+            <div className="text-right text-gray-600 text-sm whitespace-pre-line">
+              {a.location && `${a.location}\n`}
+              {a.dates}
+            </div>
+          </div>
+        </div>
+      ) : null
+    )}
+  </div>
+);
 
-  return (
-    <div className="flex h-screen">
-      {/* Left Panel */}
-      <div className="w-1/3 p-6 border-r border-gray-300 overflow-y-auto" style={{ maxHeight: '100vh' }}>
-        <h2 className="text-xl font-bold mb-4">1. Activities & Awards</h2>
 
-        {activities.map((activity, index) => (
-          <div key={index} className="mb-6 border-b pb-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold">Activity {index + 1}</h3>
+  /* --------------- Render --------------- */
+ /* -------------------- RENDER -------------------- */
+return (
+  <div className="app-container flex flex-col h-screen">
+<header className="header">
+  <div className="header-container">
+    {/* logo block */}
+    <div className="logo-container">
+      <div className="edu-logo" onClick={returnToHome}>
+        <span className="edu-icon">👨‍🎓</span>
+        <span className="edu-text">EDU AI</span>
+      </div>
+      <div className="durham-logo">DURHAM</div>
+    </div>
+
+    {/* search + links */}
+    <div className="header-actions">
+      <div className="search-container">
+        <form onSubmit={handleHeaderSearch}>
+          <input
+            type="text"
+            value={headerSearch}
+            onChange={(e) => setHeaderSearch(e.target.value)}
+            className="search-input"
+            placeholder="Search…"
+          />
+          <button type="submit" className="search-button">→</button>
+        </form>
+      </div>
+      <button className="header-button">ESSAY FAQ</button>
+      <button className="header-button">FINANCIAL AID GUIDE</button>
+    </div>
+  </div>
+</header>
+
+{/* ---------- YELLOW BANNER ---------- */}
+<div className="banner">
+  <div className="banner-container">
+    <h1 className="banner-title">BUILD RESUME</h1>
+  </div>
+</div>
+
+    {/* ---------- MAIN RESUME LAYOUT ---------- */}
+    <div className="flex flex-1 overflow-hidden">
+      {/* -------- LEFT PANE / FORM -------- */}
+      <div
+        className="w-2/5 p-6 border-r overflow-y-auto"
+        style={{ maxHeight: "100vh" }}
+      >
+        {/* Student  */}
+        <h2 className="font-bold text-xl mb-4">Student Info</h2>
+        <input
+          name="name"
+          value={student.name}
+          onChange={handleStudent}
+          placeholder="Name"
+          className="w-full p-2 border mb-2"
+        />
+        <input
+          name="email"
+          value={student.email}
+          onChange={handleStudent}
+          placeholder="Email"
+          className="w-full p-2 border mb-2"
+        />
+        <input
+          name="phone"
+          value={student.phone}
+          onChange={handleStudent}
+          placeholder="Phone"
+          className="w-full p-2 border mb-6"
+        />
+
+        {/* Education */}
+        <h2 className="font-bold text-xl mb-4">Education</h2>
+        <input
+          name="school"
+          value={education.school}
+          onChange={handleEducation}
+          placeholder="School"
+          className="w-full p-2 border mb-2"
+        />
+        <input
+          name="gpa"
+          value={education.gpa}
+          onChange={handleEducation}
+          placeholder="GPA"
+          className="w-full p-2 border mb-2"
+        />
+        <textarea
+          name="awards"
+          value={education.awards}
+          onChange={handleEducation}
+          placeholder="Awards"
+          className="w-full p-2 border mb-6"
+        />
+
+        {/* Activities list */}
+        <h2 className="font-bold text-xl mb-4">Activities</h2>
+        {activities.map((a, i) => (
+          <div key={i} className="border p-2 rounded mb-4">
+            <div className="flex justify-between items-center mb-1 text-sm font-semibold">
+              Activity {i + 1}
               {activities.length > 1 && (
                 <button
-                  onClick={() => removeActivity(index)}
-                  className="text-red-500 text-sm hover:underline"
+                  onClick={() => removeActivity(i)}
+                  className="text-red-500 text-xs"
                 >
-                  Remove
+                  remove
                 </button>
               )}
             </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold">Activity type*</label>
-              <select
-                name="activityType"
-                value={activity.activityType}
-                onChange={(e) => handleActivityChange(index, e)}
-                className="w-full p-2 border"
-              >
-                <option value="">- Choose an option -</option>
-                <option value="Club">Club</option>
-                <option value="Sports">Sports</option>
-                <option value="Volunteering">Volunteering</option>
-                <option value="Internship">Internship</option>
-                <option value="Research">Research</option>
-                <option value="Part-time Job">Part-time Job</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold">Position/Leadership description*</label>
-              <input
-                name="position"
-                maxLength={50}
-                value={activity.position}
-                onChange={(e) => handleActivityChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold">Organization Name</label>
-              <input
-                name="organization"
-                maxLength={100}
-                value={activity.organization}
-                onChange={(e) => handleActivityChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold">Activity Description*</label>
-              <textarea
-                name="description"
-                maxLength={150}
-                value={activity.description}
-                onChange={(e) => handleActivityChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold">Participation grade levels*</label>
-              <div className="flex flex-wrap gap-2">
-                {[9, 10, 11, 12].map((grade) => (
-                  <label key={grade} className="flex items-center space-x-1">
-                    <input
-                      type="checkbox"
-                      name="grades"
-                      value={grade.toString()}
-                      checked={activity.grades.includes(grade.toString())}
-                      onChange={(e) => handleActivityChange(index, e)}
-                    />
-                    <span>{grade}</span>
-                  </label>
-                ))}
-              </div>
+
+            <select
+              name="activityType"
+              value={a.activityType}
+              onChange={(e) => handleActivity(i, e)}
+              className="w-full p-1 border mb-1 text-sm"
+            >
+              <option value="">Type</option>
+              {[
+                "Sports",
+                "Internship",
+                "Research",
+                "Job",
+                "Other",
+                "Club",
+                "Volunteering",
+              ].map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+
+            <input
+              name="position"
+              value={a.position}
+              onChange={(e) => handleActivity(i, e)}
+              placeholder="Position"
+              className="w-full p-1 border mb-1 text-sm"
+            />
+            <input
+              name="organization"
+              value={a.organization}
+              onChange={(e) => handleActivity(i, e)}
+              placeholder="Organization"
+              className="w-full p-1 border mb-1 text-sm"
+            />
+            <textarea
+              name="description"
+              value={a.description}
+              onChange={(e) => handleActivity(i, e)}
+              placeholder="Description"
+              className="w-full p-1 border mb-1 text-sm"
+            />
+            <input
+              name="location"
+              value={a.location}
+              onChange={(e) => handleActivity(i, e)}
+              placeholder="Location"
+              className="w-full p-1 border mb-1 text-sm"
+            />
+            <input
+              name="dates"
+              value={a.dates}
+              onChange={(e) => handleActivity(i, e)}
+              placeholder="Dates (e.g. 2023–24)"
+              className="w-full p-1 border mb-1 text-sm"
+            />
+
+            <div className="text-xs">
+              Grades:&nbsp;
+              {[9, 10, 11, 12].map((g) => (
+                <label key={g} className="mr-2">
+                  <input
+                    type="checkbox"
+                    name="grades"
+                    value={g}
+                    checked={a.grades.includes(g.toString())}
+                    onChange={(e) => handleActivity(i, e)}
+                  />{" "}
+                  {g}
+                </label>
+              ))}
             </div>
           </div>
         ))}
 
         {activities.length < 10 && (
-          <button onClick={addActivity} className="mb-6 bg-gray-200 px-4 py-2 rounded">+ Add Activity</button>
+          <button
+            onClick={addActivity}
+            className="px-3 py-1 bg-gray-200 rounded mb-6"
+          >
+            + Add Activity
+          </button>
         )}
 
-        <h3 className="text-lg font-semibold mb-2">Education</h3>
-        <div className="mb-2">
-          <label className="block text-sm font-semibold">School Name</label>
-          <input
-            name="school"
-            value={education.school}
-            onChange={handleEducationChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block text-sm font-semibold">Awards</label>
-          <textarea
-            name="awards"
-            value={education.awards}
-            onChange={handleEducationChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-semibold">GPA</label>
-          <input
-            name="gpa"
-            value={education.gpa}
-            onChange={handleEducationChange}
-            className="w-full p-2 border"
-          />
-        </div>
+        {/* Skills */}
+        <h2 className="font-bold text-xl mb-4">Skills</h2>
+        <textarea
+          value={skills}
+          onChange={(e) => setSkills(e.target.value)}
+          placeholder="e.g., Leadership, Web Design, etc."
+          className="w-full p-2 border mb-6"
+        />
 
-        <button onClick={handleGetFeedback} className="bg-blue-500 text-white px-4 py-2 rounded">Get Feedback</button>
+        <button
+          onClick={() => window.print()}
+          className="w-full bg-green-600 text-white py-2 rounded"
+        >
+          Download PDF
+        </button>
       </div>
 
-      {/* Right Panel - Feedback and Resume Tabs */}
-      <div className="w-2/3 p-6">
-        <div className="flex space-x-4 mb-4">
-          <button
-            onClick={() => handleTabSwitch('feedback')}
-            className={`px-4 py-2 rounded ${currentTab === 'feedback' ? 'bg-yellow-300' : 'bg-gray-200'}`}
-          >
-            2. Activities Feedback
-          </button>
-          <button
-            onClick={() => handleTabSwitch('resume')}
-            className={`px-4 py-2 rounded ${currentTab === 'resume' ? 'bg-yellow-300' : 'bg-gray-200'}`}
-          >
-            3. Build Resume
-          </button>
+      {/* -------- RIGHT PANE / PREVIEW -------- */}
+      <div className="flex-1 h-full overflow-y-auto p-4">
+        <div id="print-area">
+          <Preview />
         </div>
-
-        {currentTab === 'feedback' && (
-          <div className="border border-gray-300 h-full p-4">Feedback Panel (empty for now)</div>
-        )}
-
-        {currentTab === 'resume' && (
-          <div className="border border-gray-300 h-full p-4">Resume Template (empty for now)</div>
-        )}
       </div>
     </div>
-  );
+  </div>
+);
 }
