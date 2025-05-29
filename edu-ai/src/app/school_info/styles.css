@@ -56,6 +56,12 @@ body {
     cursor: pointer;
 }
 
+.icon-logo {
+    width: 10rem;
+    height: 3rem;
+    object-fit: contain;
+}
+
 .edu-icon {
     background-color: #8b5cf6;
     color: white;
@@ -166,7 +172,7 @@ body {
 }
 
 .banner-title {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     text-align: center;
     margin: 0;
@@ -222,13 +228,19 @@ body {
 .telescope-icon {
     background-color: var(--yellow-primary);
     font-size: 32px;
-    width: 80px;
-    height: 80px;
+    width: 9rem;
+    height: 9rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     margin-bottom: 24px;
+}
+
+.telescope-logo {
+    width: 6rem;
+    height: 6rem;
+    object-fit: contain;
 }
 
 .search-prompt {
@@ -259,14 +271,20 @@ body {
 }
 
 .category-icon {
-    width: 64px;
-    height: 64px;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     margin-bottom: 8px;
+}
+
+.category-logo {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
 }
 
 .category-icon.green {
@@ -641,6 +659,12 @@ body {
     justify-content: center;
     font-size: 24px;
     margin-right: 16px;
+}
+
+.school-cap-icon {
+    background-color: transparent;
+    width: 4.5rem;
+    height: 4.5rem;
 }
 
 .school-name {

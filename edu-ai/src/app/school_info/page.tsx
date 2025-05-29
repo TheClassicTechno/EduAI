@@ -5,6 +5,16 @@ import { useState, useEffect } from 'react';
 import './styles.css';
 import Papa from 'papaparse';
 
+import { Pie } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 type SchoolData = {
   NAME: string;
   WEBSITE_LINK: string;
@@ -116,7 +126,10 @@ export default function CollegeInfoApp() {
     if (compareSearchQuery.length > 2) {
       const filtered = csvData.filter(college => 
         college.NAME.toLowerCase().includes(compareSearchQuery.toLowerCase()) &&
-        (!selectedSchool/* || college.UNITID !== selectedSchool.UNITID*/)
+        csvData.filter(college => 
+          college.NAME.toLowerCase().includes(compareSearchQuery.toLowerCase()) &&
+          college.NAME !== selectedSchool?.NAME // Avoid selecting the same school
+        )
       ).slice(0, 5);
       setCompareFilteredColleges(filtered);
     } else {
@@ -234,6 +247,49 @@ export default function CollegeInfoApp() {
     };*/
   };
 
+  const getDemographicPieDataChartJS = (school: SchoolData | null) => {
+    if (!school) return null;
+  
+    return {
+      labels: [
+        'White',
+        'Black',
+        'Hispanic',
+        'Asian',
+        'Hawaiian/Pacific Islander',
+        'Multiracial',
+        'Unknown Race',
+        'International'
+      ],
+      datasets: [
+        {
+          label: 'Population %',
+          data: [
+            school.WHITE_POP * 100,
+            school.BLACK_POP * 100,
+            school.HISPANIC_POP * 100,
+            school.ASIAN_POP * 100,
+            school.HAWAIIAN_PACIFIC_ISLANDER_POP * 100,
+            school.MULTIRACIAL_POP * 100,
+            school.UNKNOWN_RACE_POP * 100,
+            school.INTERNATIONAL_POP * 100,
+          ],
+          backgroundColor: [
+            '#8884d8',
+            '#82ca9d',
+            '#ffc658',
+            '#ff8042',
+            '#8dd1e1',
+            '#a4de6c',
+            '#d0ed57',
+            '#ffbb28',
+          ],
+          borderWidth: 1,
+        }
+      ]
+    };
+  };
+
   const schoolTabs = [
     'COST OF ENROLLMENT',
     'WHAT\'S THE VALUE OF GOING',
@@ -250,11 +306,9 @@ export default function CollegeInfoApp() {
         <div className="header-container">
           <div className="logo-container">
             <div className="edu-logo" onClick={returnToHome}>
-              <span className="edu-icon">👨‍🎓</span>
-              <span className="edu-text">EDU AI</span>
-            </div>
-            <div className="durham-logo">
-              <span>DURHAM</span>
+              <span>
+                <img src="/images/Graduation_Cap.png" alt="Graduation-Cap" className="icon-logo" onClick={returnToHome} />
+              </span>
             </div>
           </div>
           
@@ -287,12 +341,20 @@ export default function CollegeInfoApp() {
           
           <div className="main-container">
             <div className="search-intro">
-              <div className="telescope-icon">🔭</div>
+              <div className="telescope-icon">
+                <span>
+                  <img src="/images/Telescope.png" alt="Telescope" className="telescope-logo" />
+                </span>
+              </div>
               <h2 className="search-prompt">Type in a school's name to find information about...</h2>
               
               <div className="info-categories">
               <div className="info-category">
-                  <div className="category-icon green">💰</div>
+                  <div className="category-icon green">
+                    <span>
+                      <img src="/images/Scholarships.png" alt="Scholarships" className="category-logo" />
+                    </span> 
+                  </div>
                   <div className="category-text">
                     <div className="category-title">Debt, Aid,</div>
                     <div className="category-subtitle green">Scholarships</div>
@@ -300,7 +362,11 @@ export default function CollegeInfoApp() {
                 </div>
                 
                 <div className="info-category">
-                  <div className="category-icon blue">👥</div>
+                  <div className="category-icon blue">
+                    <span>
+                        <img src="/images/Demographics.png" alt="Demographics" className="category-logo" />
+                     </span> 
+                  </div>
                   <div className="category-text">
                     <div className="category-title">College</div>
                     <div className="category-subtitle blue">Demographics</div>
@@ -308,7 +374,11 @@ export default function CollegeInfoApp() {
                 </div>
                 
                 <div className="info-category">
-                  <div className="category-icon yellow">📋</div>
+                  <div className="category-icon yellow">
+                    <span>
+                      <img src="/images/Admission.png" alt="Admission" className="category-logo" />
+                    </span> 
+                  </div>
                   <div className="category-text">
                     <div className="category-title">Chances of</div>
                     <div className="category-subtitle yellow">Admission</div>
@@ -316,14 +386,18 @@ export default function CollegeInfoApp() {
                 </div>
                 
                 <div className="info-category">
-                  <div className="category-icon purple">👣</div>
+                  <div className="category-icon purple">
+                    <span>
+                      <img src="/images/Steps.png" alt="Steps" className="category-logo" />
+                    </span> 
+                  </div>
                   <div className="category-text">
                     <div className="category-title">Steps to</div>
                     <div className="category-subtitle purple">Apply</div>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> 
             
             <div className="main-search">
               <form onSubmit={handleCollegeSearch} className="main-search-form">
@@ -365,7 +439,7 @@ export default function CollegeInfoApp() {
                 ←
               </div>
               <h1 className="banner-title">FIND COLLEGE INFO</h1>
-              {!compareMode && <div className="banner-icon">🎓</div>}
+              {!compareMode && <div className="banner-icon"></div>}
             </div>
           </div>
           
@@ -551,48 +625,27 @@ export default function CollegeInfoApp() {
                     {activeTab === 'DEMOGRAPHICS' && (
                       <div className="comparison-demographics-info">
                         {selectedSchool && comparisonSchool && (
-                          <div className="comparison-stats">
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">WHITE POP</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.WHITE_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
-                                </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.WHITE_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
-                                </div>
-                              </div>
+                          <div>
+                            <div style={{ width: '100%', maxWidth: 600, margin: '0 auto' }}>
+                              <h3 className="text-center font-bold text-xl mb-4">Student Demographics of {selectedSchool.NAME}</h3>
+                              <Pie 
+                              data={getDemographicPieDataChartJS(selectedSchool)!} 
+                              options = 
+                                {{
+                                  responsive: true,
+                                  plugins: {
+                                    legend: {
+                                      position: 'right',
+                                      labels: {
+                                        boxWidth: 20,
+                                        padding: 15,
+                                      }
+                                    },
+                                  },
+                                }}
+                              />
                             </div>
-                            
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">BLACK POP</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.BLACK_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
-                                </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.BLACK_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div className="comparison-stat-card">
-                              <div className="stat-title">ASIAN POP</div>
-                              <div className="stat-comparison">
-                                <div className="stat-school-1">
-                                  <div className="stat-value">{getMockData(selectedSchool.NAME)?.ASIAN_POP}%</div>
-                                  <div className="stat-label">{selectedSchool.NAME}</div>
-                                </div>
-                                <div className="stat-school-2">
-                                  <div className="stat-value">{getMockData(comparisonSchool.NAME)?.ASIAN_POP}%</div>
-                                  <div className="stat-label">{comparisonSchool.NAME}</div>
-                                </div>
-                              </div>
-                            </div>
+                     
                           </div>
                         )}
                       </div>
@@ -613,7 +666,9 @@ export default function CollegeInfoApp() {
             ) : (
               <>
                 <div className="school-header">
-                  <div className="school-icon">🎓</div>
+                  <div className="school-icon school-cap-icon">
+                    <img src="/images/Cap.png" alt="Grad_Cap" className="category-logo" />
+                  </div>
                   <h2 className="school-name">{selectedSchool?.NAME}</h2>
                   <div className="school-location">{selectedSchool?.NAME}, {selectedSchool?.NAME}</div>
                 </div>
@@ -716,35 +771,59 @@ export default function CollegeInfoApp() {
                     )}
                     
                     {activeTab === 'DEMOGRAPHICS' && selectedSchool && (
-                      <div className="demographics-info">
-                        <div className="stat-cards">
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.WHITE_POP}%</div>
-                            <div className="stat-label">WHITE POP</div>
-                            <div className="info-icon">📊</div>
-                            <p className="stat-description">
-                              Total undergraduate students enrolled at {selectedSchool.NAME}.
-                            </p>
-                          </div>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}>
+                        <div style={{ width: '100%', maxWidth: '100rem', margin: '0 auto', alignItems: 'center', textAlign: 'center', marginTop: -30}} className="flex flex-col items-center justify-center w-full py-8">
+                          <h3 className="text-left font-bold text-2xl mb-6">
+                            Student Demographics – {selectedSchool.NAME}
+                          </h3>
                           
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.BLACK_POP}%</div>
-                            <div className="stat-label">BLACK POP</div>
-                            <div className="info-icon">👥</div>
-                            <p className="stat-description">
-                              Measure of racial and ethnic diversity at {selectedSchool.NAME}.
-                            </p>
-                          </div>
-                          
-                          <div className="stat-card">
-                            <div className="stat-value">{getMockData(selectedSchool.NAME)?.ASIAN_POP}%</div>
-                            <div className="stat-label">ASIAN POP</div>
-                            <div className="info-icon">👩‍🏫</div>
-                            <p className="stat-description">
-                              The ratio of students to faculty at {selectedSchool.NAME}.
-                            </p>
+                          <div className="flex flex-col lg:flex-row items-center justify-center gap-2 w-full max-w-4xl mx-auto">
+                          {/* Left side: Large Pie Chart */}
+                            <div style={{ width: '30%' }}>
+                              <Pie
+                                data={getDemographicPieDataChartJS(selectedSchool)!}
+                                options={{
+                                  responsive: true,
+                                  plugins: {
+                                    legend: {
+                                      display: false // We'll place legend manually
+                                    }
+                                  }
+                                }}
+                              />
+                            </div>
+
+                            {/* Right side: Legend */}
+                            <div
+                              style={{
+                                width: '50%',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, minmax(100px, 1fr))',
+                                gap: '10px',
+                                paddingLeft: '30px',
+                                paddingTop: '10px'
+                              }}
+                            >
+                              {getDemographicPieDataChartJS(selectedSchool)!.labels.map((label, index) => (
+                                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <div
+                                    style={{
+                                      width: '16px',
+                                      height: '16px',
+                                      backgroundColor: getDemographicPieDataChartJS(selectedSchool)!.datasets[0].backgroundColor[index],
+                                    }}
+                                  />
+                                  <span>{label}</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
+               
                       </div>
                     )}
                     
